@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Categoria | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<!-- =====================================================
+     CONTEÚDO
+     ===================================================== -->
+
+<main class="bp-admin-main">
+
+    <div class="container bp-admin-simple-form-page">
+
+
+        <!-- =================================================
+             CABEÇALHO
+             ================================================= -->
+
+        <div class="bp-admin-form-heading">
+
+            <div>
+
+                <span class="bp-section-eyebrow">
+                    ORGANIZAÇÃO DO CATÁLOGO
+                </span>
+
+                <h1 th:text="${edicao ? 'Editar categoria' : 'Nova categoria'}">
+                    Categoria
+                </h1>
+
+                <p>
+                    Defina o nome, a URL amigável e a disponibilidade
+                    da categoria no catálogo.
+                </p>
+
+            </div>
+
+
+            <a th:href="@{/admin/categorias}"
+               class="bp-admin-form-back">
+
+                ← Voltar às categorias
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             ERRO
+             ================================================= -->
+
+        <div class="bp-admin-message bp-admin-message-error"
+             th:if="${erro}"
+             th:text="${erro}">
+        </div>
+
+
+        <!-- =================================================
+             FORMULÁRIO
+             ================================================= -->
+
+        <form
+                th:object="${categoria}"
+
+                th:action="${edicao}
+                    ? @{/admin/categorias/{id}(id=${categoria.id})}
+                    : @{/admin/categorias}"
+
+                method="post"
+
+                class="bp-admin-product-form">
+
+
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}">
+
+
+            <section class="bp-admin-form-section">
+
+
+                <div class="bp-admin-form-section-heading">
+
+                    <span class="bp-admin-form-section-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Informações da categoria
+                        </h2>
+
+                        <p>
+                            Dados utilizados na administração e no catálogo público.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOME -->
+
+                <div class="bp-admin-field">
+
+                    <label for="nome">
+                        Nome
+                    </label>
+
+                    <input
+                            id="nome"
+                            type="text"
+                            th:field="*{nome}"
+                            placeholder="Ex.: Bicicletas">
+
+                    <span
+                            class="field-error"
+                            th:errors="*{nome}">
+                    </span>
+
+                </div>
+
+
+                <!-- SLUG -->
+
+                <div class="bp-admin-field">
+
+                    <label for="slug">
+                        Slug
+                    </label>
+
+                    <input
+                            id="slug"
+                            type="text"
+                            th:field="*{slug}"
+                            placeholder="Ex.: bicicletas">
+
+                    <span
+                            class="field-error"
+                            th:errors="*{slug}">
+                    </span>
+
+                </div>
+
+
+            </section>
+
+
+            <!-- =================================================
+                 STATUS
+                 ================================================= -->
+
+            <section class="bp-admin-form-section">
+
+                <div class="bp-admin-form-section-heading">
+
+                    <span class="bp-admin-form-section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Visibilidade
+                        </h2>
+
+                        <p>
+                            Controle se a categoria pode ser utilizada no catálogo.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="bp-admin-checkbox-grid">
+
+                    <label class="bp-admin-checkbox-card">
+
+                        <input
+                                type="checkbox"
+                                th:field="*{ativo}">
+
+                        <span class="bp-admin-checkbox-content">
+
+                            <strong>
+                                Categoria ativa
+                            </strong>
+
+                            <small>
+                                Permite que a categoria seja utilizada
+                                nos produtos da loja.
+                            </small>
+
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AÇÕES
+                 ================================================= -->
+
+            <div class="bp-admin-form-actions">
+
+                <a th:href="@{/admin/categorias}"
+                   class="bp-admin-cancel-button">
+
+                    Cancelar
+
+                </a>
+
+
+                <button
+                        class="bp-admin-save-button"
+                        type="submit">
+
+                    Salvar categoria
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

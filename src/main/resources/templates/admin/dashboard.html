@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Administração | Bike Padrão
+    </title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}">
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<!-- =====================================================
+     HEADER ADMINISTRATIVO
+     ===================================================== -->
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<!-- =====================================================
+     CONTEÚDO
+     ===================================================== -->
+
+<main class="bp-admin-main">
+
+    <div class="container">
+
+
+        <!-- TÍTULO -->
+
+        <div class="bp-admin-page-heading">
+
+            <span class="bp-section-eyebrow">
+                GERENCIAMENTO
+            </span>
+
+            <h1>
+                Painel administrativo
+            </h1>
+
+            <p>
+                Gerencie os produtos, categorias e marcas
+                disponíveis na loja.
+            </p>
+
+        </div>
+
+
+        <!-- CARDS -->
+
+        <div class="bp-admin-grid">
+
+
+            <!-- PRODUTOS -->
+
+            <a th:href="@{/admin/produtos}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    01
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos
+                    </strong>
+
+                    <span>
+                        Cadastrar, editar e gerenciar
+                        os produtos da loja.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- CATEGORIAS -->
+
+            <a th:href="@{/admin/categorias}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    02
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Categorias
+                    </strong>
+
+                    <span>
+                        Organizar e gerenciar
+                        as categorias do catálogo.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- MARCAS -->
+
+            <a th:href="@{/admin/marcas}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    03
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Marcas
+                    </strong>
+
+                    <span>
+                        Cadastrar e gerenciar
+                        as marcas dos produtos.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- VOLTAR PARA A LOJA -->
+
+        <div class="bp-admin-store-link-area">
+
+            <a th:href="@{/}"
+               class="bp-admin-store-link">
+
+                ← Voltar para a loja
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

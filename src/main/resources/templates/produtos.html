@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos | Bike Padrão</title>
+
+    <!-- CSS original -->
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <!-- Nova identidade visual -->
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div th:replace="~{fragments/header :: publicHeader}"></div>
+
+
+<!-- =====================================================
+     CONTEÚDO
+     ===================================================== -->
+
+<main class="bp-catalog-page">
+
+    <section class="section">
+
+        <div class="container">
+
+            <h1 class="section-title">
+                Produtos
+            </h1>
+
+
+            <!-- =================================================
+                 PESQUISA E FILTROS
+                 ================================================= -->
+
+            <form class="catalog-filter"
+                  method="get"
+                  th:action="@{/produtos}">
+
+
+                <div class="filter-search">
+
+                    <input
+                            type="search"
+                            name="busca"
+                            placeholder="Buscar produto..."
+                            th:value="${busca}">
+
+                </div>
+
+
+                <div class="filter-category">
+                    <select name="categoria">
+                        <option value="">
+                            Todas as categorias
+                        </option>
+                        <option
+                                th:each="categoria : ${categorias}"
+                                th:value="${categoria.slug}"
+                                th:text="${categoria.nome}"
+                                th:selected="${categoria.slug == categoriaSelecionada}">
+                            Categoria
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-category">
+                    <select name="marca">
+                        <option value="">
+                            Todas as marcas
+                        </option>
+                        <option
+                                th:each="marca : ${marcas}"
+                                th:value="${marca.slug}"
+                                th:text="${marca.nome}"
+                                th:selected="${marca.slug == marcaSelecionada}">
+                        </option>
+                    </select>
+                </div>
+                
+                <button
+                        class="button"
+                        type="submit">
+
+                    Buscar
+
+                </button>
+
+
+                <a class="filter-clear"
+                   th:href="@{/produtos}">
+
+                    Limpar
+
+                </a>
+
+            </form>
+
+
+            <!-- =================================================
+                 NENHUM PRODUTO
+                 ================================================= -->
+
+            <div class="bp-empty-state"
+                 th:if="${#lists.isEmpty(produtos)}">
+
+                Nenhum produto encontrado com os filtros selecionados.
+
+            </div>
+
+
+            <!-- =================================================
+                 PRODUTOS
+                 ================================================= -->
+
+            <div class="bp-product-grid"
+                 th:unless="${#lists.isEmpty(produtos)}">
+
+                <article class="bp-product-card"
+                         th:each="produto : ${produtos}">
+
+                    <!-- IMAGEM -->
+
+                    <a class="bp-product-image-area"
+                       th:href="@{/produto/{slug}(slug=${produto.slug})}">
+
+                        <img th:if="${produto.imagemPrincipal != null}"
+                             th:src="${produto.imagemPrincipal}"
+                             th:alt="${produto.nome}"
+                             class="bp-product-image">
+
+                        <div th:unless="${produto.imagemPrincipal != null}"
+                             class="bp-product-placeholder">
+                            Imagem indisponível
+                        </div>
+
+                        <span class="bp-product-badge"
+                              th:if="${produto.precoPromocional != null}">
+                OFERTA
+            </span>
+
+                    </a>
+
+
+                    <!-- CONTEÚDO -->
+
+                    <div class="bp-product-content">
+
+                        <div class="bp-product-meta">
+
+                <span class="bp-product-category"
+                      th:if="${produto.categoria != null}"
+                      th:text="${produto.categoria}">
+                    Categoria
+                </span>
+
+                            <span class="bp-product-brand"
+                                  th:if="${produto.marca != null}"
+                                  th:text="${produto.marca}">
+                    Marca
+                </span>
+
+                        </div>
+
+
+                        <h2 class="bp-product-name">
+
+                            <a th:href="@{/produto/{slug}(slug=${produto.slug})}"
+                               th:text="${produto.nome}">
+                                Produto
+                            </a>
+
+                        </h2>
+
+
+                        <p class="bp-product-description"
+                           th:if="${produto.descricaoCurta != null}"
+                           th:text="${produto.descricaoCurta}">
+                            Descrição
+                        </p>
+
+
+                        <!-- PREÇO -->
+
+                        <div class="bp-product-price-area">
+
+                            <div th:if="${produto.precoPromocional != null}">
+
+                    <span class="bp-old-price"
+                          th:text="${'R$ ' + produto.preco}">
+                        R$ 0,00
+                    </span>
+
+                                <div class="bp-product-price"
+                                     th:text="${'R$ ' + produto.precoPromocional}">
+                                    R$ 0,00
+                                </div>
+
+                            </div>
+
+
+                            <div th:unless="${produto.precoPromocional != null}">
+
+                                <div class="bp-product-price"
+                                     th:text="${'R$ ' + produto.preco}">
+                                    R$ 0,00
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- BOTÃO -->
+
+                        <a class="bp-product-button"
+                           th:href="@{/produto/{slug}(slug=${produto.slug})}">
+
+                            Ver produto
+
+                            <span>
+                    →
+                </span>
+
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/whatsapp :: whatsappButton}"></div>
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<div th:replace="~{fragments/footer :: publicFooter}"></div>
+
+</body>
+</html>

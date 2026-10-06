@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Bike Padrão</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/theme.css}">
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+<div th:replace="~{fragments/header :: publicHeader}"></div>
+
+
+<main>
+    <!-- HERO -->
+    <section class="bp-hero">
+
+        <div class="container">
+            <a href="#specialized"
+                   class="bp-specialized-hero-link"
+                   aria-label="Saiba mais sobre a Bike Padrão como revendedor autorizado Specialized">
+
+                    <img th:src="@{/images/specialized-logo.svg}"
+                         src="/images/specialized-logo.svg"
+                         alt="Specialized"
+                         class="bp-specialized-hero-logo">
+
+                    <span class="bp-specialized-hero-label">
+                        REVENDEDOR<br>
+                        AUTORIZADO
+                    </span>
+                </a>
+
+                <h1>Sua bike pronta para ir mais longe.</h1>
+                <p>
+                    Bicicletas, componentes e acessórios para todos os tipos
+                    de pedal. Conte também com atendimento especializado e
+                    oficina autorizada Specialized em Mogi das Cruzes.
+                </p>
+
+                <div class="bp-hero-actions">
+                    <a th:href="@{/produtos}"
+                       class="bp-hero-button">
+                        Ver catálogo
+                    </a>
+
+                    <a href="https://wa.me/5511940619652?text=Ol%C3%A1%2C%20gostaria%20de%20falar%20sobre%20a%20oficina%20Specialized."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="bp-hero-button-secondary">
+                        Falar com a oficina
+                    </a>
+                </div>
+        </div>
+
+    </section>
+
+    <!-- CATEGORIAS -->
+    <section class="section bp-category-section">
+
+        <div class="container">
+
+            <div class="bp-section-heading">
+
+                <div>
+                <span class="bp-section-eyebrow">
+                    ENCONTRE O QUE PRECISA
+                </span>
+
+                    <h2>
+                        Categorias
+                    </h2>
+                </div>
+
+                <a th:href="@{/produtos}"
+                   class="bp-section-link">
+                    Ver todos os produtos
+                </a>
+
+            </div>
+
+
+            <div class="bp-category-grid">
+
+                <a class="bp-category-card"
+                   th:each="categoria : ${categorias}"
+                   th:href="@{/produtos(categoria=${categoria.slug})}">
+
+                    <div class="bp-category-accent"></div>
+
+                    <span class="bp-category-name"
+                          th:text="${categoria.nome}">
+                    Categoria
+                </span>
+
+                    <span class="bp-category-arrow">
+                    →
+                </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- DESTAQUES -->
+    <section class="section bp-featured-section">
+
+        <div class="container">
+
+            <div class="bp-section-heading">
+
+                <div>
+
+                <span class="bp-section-eyebrow">
+                    SELEÇÃO BIKE PADRÃO
+                </span>
+
+                    <h2>
+                        Produtos em destaque
+                    </h2>
+
+                </div>
+
+                <a th:href="@{/produtos}"
+                   class="bp-section-link">
+                    Ver catálogo completo
+                </a>
+
+            </div>
+
+
+            <div class="bp-empty-state"
+                 th:if="${#lists.isEmpty(produtosDestaque)}">
+
+                Nenhum produto em destaque no momento.
+
+            </div>
+
+
+            <div class="bp-product-grid"
+                 th:unless="${#lists.isEmpty(produtosDestaque)}">
+
+
+                <article class="bp-product-card"
+                         th:each="produto : ${produtosDestaque}">
+
+
+                    <a class="bp-product-image-area"
+                       th:href="@{/produto/{slug}(slug=${produto.slug})}">
+
+
+                        <img th:if="${produto.imagemPrincipal != null}"
+                             th:src="${produto.imagemPrincipal}"
+                             th:alt="${produto.nome}"
+                             class="bp-product-image">
+
+
+                        <div th:unless="${produto.imagemPrincipal != null}"
+                             class="bp-product-placeholder">
+
+                            Imagem indisponível
+
+                        </div>
+
+
+                        <span class="bp-product-badge"
+                              th:if="${produto.precoPromocional != null}">
+                        OFERTA
+                    </span>
+
+                    </a>
+
+
+                    <div class="bp-product-content">
+
+
+                        <div class="bp-product-category"
+                             th:if="${produto.categoria != null}"
+                             th:text="${produto.categoria}">
+                            Categoria
+                        </div>
+
+
+                        <h3 class="bp-product-name">
+
+                            <a th:href="@{/produto/{slug}(slug=${produto.slug})}"
+                               th:text="${produto.nome}">
+                                Produto
+                            </a>
+
+                        </h3>
+
+
+                        <p class="bp-product-description"
+                           th:text="${produto.descricaoCurta}">
+                            Descrição do produto
+                        </p>
+
+
+                        <div class="bp-product-price-area">
+
+
+                            <div th:if="${produto.precoPromocional != null}">
+
+                            <span class="bp-old-price"
+                                  th:text="${'R$ ' + produto.preco}">
+                                R$ 0,00
+                            </span>
+
+                                <div class="bp-product-price"
+                                     th:text="${'R$ ' + produto.precoPromocional}">
+                                    R$ 0,00
+                                </div>
+
+                            </div>
+
+
+                            <div th:unless="${produto.precoPromocional != null}">
+
+                                <div class="bp-product-price"
+                                     th:text="${'R$ ' + produto.preco}">
+                                    R$ 0,00
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <a class="bp-product-button"
+                           th:href="@{/produto/{slug}(slug=${produto.slug})}">
+
+                            Ver produto
+                            <span>→</span>
+
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SPECIALIZED -->
+    <section id="specialized"
+             class="bp-specialized-section">
+
+        <div class="container">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="bp-specialized-section-header">
+
+
+                <!-- MARCA -->
+
+                <div class="bp-specialized-section-brand">
+
+                    <img th:src="@{/images/specialized-logo.svg}"
+                         src="/images/specialized-logo.svg"
+                         alt="Specialized"
+                         class="bp-specialized-section-logo">
+
+                    <span>
+                    REVENDEDOR AUTORIZADO
+                </span>
+
+                </div>
+
+
+                <!-- TEXTO -->
+
+                <div class="bp-specialized-section-title">
+
+                <span class="bp-section-eyebrow">
+                    SPECIALIZED NA BIKE PADRÃO
+                </span>
+
+                    <h2>
+                        Muito além de vender bicicletas.
+                    </h2>
+
+                    <p>
+                        Na Bike Padrão você encontra produtos Specialized
+                        e conta com uma equipe preparada para cuidar da sua
+                        bicicleta também depois da compra.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIFERENCIAIS -->
+
+            <div class="bp-specialized-benefits">
+
+
+                <article class="bp-specialized-benefit">
+
+                <span class="bp-specialized-benefit-number">
+                    01
+                </span>
+
+                    <h3>
+                        Revendedor autorizado
+                    </h3>
+
+                    <p>
+                        Bicicletas, peças, componentes e acessórios
+                        Specialized com atendimento especializado
+                        em nossa loja física.
+                    </p>
+
+                </article>
+
+
+                <article class="bp-specialized-benefit">
+
+                <span class="bp-specialized-benefit-number">
+                    02
+                </span>
+
+                    <h3>
+                        Oficina especializada
+                    </h3>
+
+                    <p>
+                        Manutenção em bicicletas Specialized,
+                        desde ajustes e revisões até serviços
+                        mecânicos mais completos.
+                    </p>
+
+                </article>
+
+
+                <article class="bp-specialized-benefit">
+
+                <span class="bp-specialized-benefit-number">
+                    03
+                </span>
+
+                    <h3>
+                        Suspensões
+                    </h3>
+
+                    <p>
+                        Realizamos também serviços de manutenção
+                        em suspensões, mantendo sua bicicleta
+                        preparada para continuar rodando.
+                    </p>
+
+                </article>
+
+
+                <article class="bp-specialized-benefit">
+
+                <span class="bp-specialized-benefit-number">
+                    04
+                </span>
+
+                    <h3>
+                        Peças e acessórios
+                    </h3>
+
+                    <p>
+                        Encontre peças, componentes, acessórios
+                        e outros produtos da Specialized para
+                        sua bike e para o seu pedal.
+                    </p>
+
+                </article>
+
+            </div>
+
+
+            <!-- AÇÕES -->
+
+            <div class="bp-specialized-section-actions">
+
+                <a th:href="@{/produtos(marca='specialized')}"
+                   class="bp-specialized-products-button">
+
+                    Ver produtos Specialized
+
+                    <span>
+                    →
+                </span>
+
+                </a>
+
+
+                <a href="https://wa.me/5511940619652?text=Ol%C3%A1%2C%20gostaria%20de%20falar%20sobre%20a%20oficina%20Specialized."
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="bp-specialized-service-button">
+
+                    Falar com a oficina
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+    <!-- COMO COMPRAR -->
+    <section id="como-comprar" class="bp-how-to-buy">
+
+        <div class="container">
+
+            <div class="bp-section-heading">
+
+                <div>
+
+                <span class="bp-section-eyebrow">
+                    COMO COMPRAR
+                </span>
+
+                    <h2>
+                        Simples, rápido e direto.
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="bp-how-to-buy-grid">
+
+
+                <article class="bp-how-to-buy-card">
+
+                <span class="bp-how-to-buy-number">
+                    01
+                </span>
+
+                    <h3>
+                        Escolha o produto
+                    </h3>
+
+                    <p>
+                        Navegue pelo catálogo e encontre o produto
+                        que você procura.
+                    </p>
+
+                </article>
+
+
+                <article class="bp-how-to-buy-card">
+
+                <span class="bp-how-to-buy-number">
+                    02
+                </span>
+
+                    <h3>
+                        Fale conosco
+                    </h3>
+
+                    <p>
+                        Entre em contato pelo WhatsApp para confirmar
+                        disponibilidade e tirar suas dúvidas.
+                    </p>
+
+                </article>
+
+
+                <article class="bp-how-to-buy-card">
+
+                <span class="bp-how-to-buy-number">
+                    03
+                </span>
+
+                    <h3>
+                        Finalize a compra
+                    </h3>
+
+                    <p>
+                        Combine pagamento, retirada ou entrega
+                        diretamente com a Bike Padrão.
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="bp-contact">
+        <div class="container">
+            <div class="bp-section-heading">
+                <div>
+                <span class="bp-section-eyebrow">
+                    CONTATO
+                </span>
+                    <h2>
+                        Fale com a Bike Padrão.
+                    </h2>
+                </div>
+            </div>
+            <div class="bp-contact-grid">
+                <!-- WHATSAPP -->
+                <div class="bp-contact-card">
+                <span class="bp-contact-label">
+                    WHATSAPP
+                </span>
+
+                    <h3>
+                        Atendimento rápido
+                    </h3>
+
+                    <p>
+                        Entre em contato para consultar produtos,
+                        disponibilidade e condições de compra.
+                    </p>
+
+                    <a
+                            href="https://wa.me/5511940619652"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="bp-contact-button">
+
+                        (11) 94061-9652
+
+                        <span>
+                        →
+                    </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- TELEFONE E HORÁRIO -->
+
+                <div class="bp-contact-card">
+
+                <span class="bp-contact-label">
+                    ATENDIMENTO
+                </span>
+
+                    <h3>
+                        Telefone e horário
+                    </h3>
+
+                    <p class="bp-contact-info">
+                        <strong>Telefone:</strong>
+                        <a href="tel:+551147617910">
+                            (11) 4761-7910
+                        </a>
+                    </p>
+
+                    <p class="bp-contact-info">
+                        <strong>Segunda a sexta:</strong>
+                        8h às 18h
+                    </p>
+
+                    <p class="bp-contact-info">
+                        <strong>Sábado:</strong>
+                        8h às 13h
+                    </p>
+
+                </div>
+
+
+                <!-- ENDEREÇO -->
+
+                <div class="bp-contact-card">
+
+                <span class="bp-contact-label">
+                    LOJA FÍSICA
+                </span>
+
+                    <h3>
+                        Visite nossa loja
+                    </h3>
+
+                    <address class="bp-contact-address">
+
+                        Av. Ver. Narciso Yague Guimarães, 88
+                        <br>
+
+                        Vila Partenio, Mogi das Cruzes – SP
+                        <br>
+
+                        CEP 08780-200
+
+                    </address>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/whatsapp :: whatsappButton}"></div>
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+<div th:replace="~{fragments/footer :: publicFooter}"></div>
+
+</body>
+</html>

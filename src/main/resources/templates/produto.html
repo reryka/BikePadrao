@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${produto.nome + ' | BikePadrao'}">
+        Produto | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div th:replace="~{fragments/header :: publicHeader}"></div>
+
+
+<!-- =====================================================
+     PRODUTO
+     ===================================================== -->
+
+<main class="bp-product-detail-page">
+
+    <section class="section">
+
+        <div class="container">
+
+
+            <!-- VOLTAR -->
+
+            <a th:href="@{/produtos}"
+               class="bp-product-back">
+
+                ← Voltar ao catálogo
+
+            </a>
+
+
+            <!-- ÁREA PRINCIPAL -->
+
+            <div class="bp-product-detail">
+
+
+                <!-- =================================================
+                     GALERIA
+                     ================================================= -->
+
+                <div class="bp-product-gallery-area">
+
+
+                    <div th:if="${!#lists.isEmpty(produto.imagens)}"
+                         class="bp-detail-gallery">
+
+
+                        <div class="bp-main-image-box">
+
+                            <img
+                                    id="imagem-principal"
+                                    class="bp-main-image"
+                                    th:src="${produto.imagens[0].url}"
+                                    th:alt="${produto.nome}">
+
+                        </div>
+
+
+                        <div class="bp-detail-thumbnails">
+
+                            <button
+                                    type="button"
+                                    class="bp-thumbnail-button"
+                                    th:each="imagem, status : ${produto.imagens}"
+                                    th:classappend="${status.index == 0} ? ' is-active' : ''"
+                                    onclick="
+                                    const galeria = this.closest('.bp-detail-gallery');
+
+                                    galeria
+                                        .querySelectorAll('.bp-thumbnail-button')
+                                        .forEach(botao =>
+                                            botao.classList.remove('is-active')
+                                        );
+
+                                    this.classList.add('is-active');
+
+                                    document
+                                        .getElementById('imagem-principal')
+                                        .src = this.querySelector('img').src;">
+                                        <img th:src="${imagem.url}" th:alt="${produto.nome}" class="bp-detail-thumbnail">
+
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div
+                            th:if="${#lists.isEmpty(produto.imagens)}"
+                            class="bp-detail-placeholder">
+
+                        Imagem indisponível
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =================================================
+                     INFORMAÇÕES
+                     ================================================= -->
+
+                <div class="bp-product-info">
+
+
+                    <!-- CATEGORIA / MARCA -->
+
+                    <div class="bp-detail-meta">
+
+                        <span class="bp-detail-category"
+                              th:if="${produto.categoria != null}"
+                              th:text="${produto.categoria}">
+
+                            Categoria
+
+                        </span>
+
+
+                        <span class="bp-detail-brand"
+                              th:if="${produto.marca != null}"
+                              th:text="${produto.marca}">
+
+                            Marca
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- SKU -->
+
+                    <span class="bp-detail-sku"
+                          th:if="${produto.sku != null}"
+                          th:text="${'Código: ' + produto.sku}">
+
+                        Código
+
+                    </span>
+
+
+                    <!-- NOME -->
+
+                    <h1 class="bp-detail-title"
+                        th:text="${produto.nome}">
+
+                        Produto
+
+                    </h1>
+
+
+                    <!-- DESCRIÇÃO CURTA -->
+
+                    <p class="bp-detail-description"
+                       th:if="${produto.descricaoCurta != null}"
+                       th:text="${produto.descricaoCurta}">
+
+                        Descrição curta
+
+                    </p>
+
+
+                    <!-- PREÇO -->
+
+                    <div class="bp-detail-price-area">
+
+
+                        <div th:if="${produto.precoPromocional != null}">
+
+                            <span class="bp-detail-old-price"
+                                  th:text="${'R$ ' + produto.preco}">
+
+                                R$ 0,00
+
+                            </span>
+
+
+                            <div class="bp-detail-price"
+                                 th:text="${'R$ ' + produto.precoPromocional}">
+
+                                R$ 0,00
+
+                            </div>
+
+                        </div>
+
+
+                        <div th:unless="${produto.precoPromocional != null}">
+
+                            <div class="bp-detail-price"
+                                 th:text="${'R$ ' + produto.preco}">
+
+                                R$ 0,00
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- ESTOQUE -->
+
+                    <div class="bp-stock bp-stock-available"
+                         th:if="${produto.estoque > 0}">
+
+                        <span class="bp-stock-dot"></span>
+
+                        Em estoque
+
+                    </div>
+
+
+                    <div class="bp-stock bp-stock-empty"
+                         th:unless="${produto.estoque > 0}">
+
+                        <span class="bp-stock-dot"></span>
+
+                        Produto indisponível
+
+                    </div>
+
+
+                    <!-- WHATSAPP -->
+
+                    <a th:if="${produto.estoque > 0}"
+                       class="bp-whatsapp-button"
+                       th:href="${whatsappUrl}"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        Comprar pelo WhatsApp
+
+                        <span>
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <p class="bp-whatsapp-help"
+                       th:if="${produto.estoque > 0}">
+
+                        Consulte disponibilidade, pagamento e retirada diretamente com a loja.
+
+                    </p>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DESCRIÇÃO COMPLETA
+                 ================================================= -->
+
+            <section class="bp-product-extra"
+                     th:if="${produto.descricao != null || !#lists.isEmpty(produto.especificacoes)}">
+
+
+                <!-- SOBRE O PRODUTO -->
+
+                <div class="bp-product-about"
+                     th:if="${produto.descricao != null}">
+
+        <span class="bp-section-eyebrow">
+            DETALHES
+        </span>
+
+                    <h2>
+                        Sobre o produto
+                    </h2>
+
+                    <p th:text="${produto.descricao}">
+                        Descrição completa.
+                    </p>
+
+                </div>
+
+
+                <!-- ESPECIFICAÇÕES -->
+
+                <div class="bp-product-specifications"
+                     th:unless="${#lists.isEmpty(produto.especificacoes)}">
+
+        <span class="bp-section-eyebrow">
+            FICHA TÉCNICA
+        </span>
+
+                    <h2>
+                        Especificações técnicas
+                    </h2>
+
+
+                    <div class="bp-specification-table">
+
+                        <div
+                                class="bp-specification-row"
+                                th:each="especificacao : ${produto.especificacoes}">
+
+                            <div
+                                    class="bp-specification-name"
+                                    th:text="${especificacao.nome}">
+
+                                Especificação
+
+                            </div>
+
+                            <div
+                                    class="bp-specification-value"
+                                    th:text="${especificacao.valor}">
+
+                                Valor
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+<div th:replace="~{fragments/whatsapp :: whatsappButton}"></div>
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<div th:replace="~{fragments/footer :: publicFooter}"></div>
+
+
+</body>
+</html>

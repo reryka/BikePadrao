@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header class="bp-header"
+        th:fragment="publicHeader">
+
+    <div class="container bp-header-content">
+
+        <a th:href="@{/}"
+           class="bp-brand">
+
+            <span class="bp-brand-name">
+                BIKE <strong>PADRÃO</strong>
+            </span>
+
+            <span class="bp-brand-subtitle">
+                PEÇAS &amp; ACESSÓRIOS
+            </span>
+
+        </a>
+
+
+        <nav class="bp-nav">
+
+            <a th:href="@{/}"
+               class="bp-nav-link">
+                Início
+            </a>
+
+            <a th:href="@{/produtos}"
+               class="bp-nav-link">
+                Catálogo
+            </a>
+
+            <a href="/#como-comprar"
+               class="bp-nav-link">
+                Como comprar
+            </a>
+
+            <a href="/#contato"
+               class="bp-nav-link">
+                Contato
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+</body>
+</html>

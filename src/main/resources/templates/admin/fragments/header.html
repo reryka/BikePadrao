@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<header class="bp-admin-header"
+        th:fragment="adminHeader">
+
+    <div class="container bp-admin-header-content">
+
+        <!-- MARCA -->
+
+        <a th:href="@{/admin}"
+           class="bp-admin-brand">
+
+            <span class="bp-admin-brand-name">
+                BIKE <strong>PADRÃO</strong>
+            </span>
+
+            <span class="bp-admin-brand-subtitle">
+                ADMINISTRAÇÃO
+            </span>
+
+        </a>
+
+
+        <!-- NAVEGAÇÃO -->
+
+        <nav class="bp-admin-nav">
+
+            <a th:href="@{/admin}"
+               class="bp-admin-nav-link">
+                Painel
+            </a>
+
+            <a th:href="@{/admin/produtos}"
+               class="bp-admin-nav-link">
+                Produtos
+            </a>
+
+            <a th:href="@{/admin/categorias}"
+               class="bp-admin-nav-link">
+                Categorias
+            </a>
+
+            <a th:href="@{/admin/marcas}"
+               class="bp-admin-nav-link">
+                Marcas
+            </a>
+
+            <a th:href="@{/}"
+               class="bp-admin-nav-store">
+                Ver loja
+            </a>
+
+
+            <form th:action="@{/admin/logout}"
+                  method="post"
+                  class="bp-admin-logout-form">
+
+                <input
+                        type="hidden"
+                        th:name="${_csrf.parameterName}"
+                        th:value="${_csrf.token}">
+
+                <button
+                        type="submit"
+                        class="bp-admin-logout">
+
+                    Sair
+
+                </button>
+
+            </form>
+
+        </nav>
+
+    </div>
+
+</header>
+
+</body>
+</html>

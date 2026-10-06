@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Administração | Bike Padrão
+    </title>
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/style.css}">
+
+    <link
+            rel="stylesheet"
+            th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-login-page">
+
+
+<main class="bp-admin-login-container">
+
+
+    <div class="bp-admin-login-card">
+
+
+        <!-- MARCA -->
+
+        <div class="bp-admin-login-brand">
+
+            <span class="bp-admin-login-brand-name">
+                BIKE <strong>PADRÃO</strong>
+            </span>
+
+            <span class="bp-admin-login-brand-subtitle">
+                PEÇAS & ACESSÓRIOS
+            </span>
+
+        </div>
+
+
+        <!-- TÍTULO -->
+
+        <div class="bp-admin-login-heading">
+
+            <h1>
+                Área administrativa
+            </h1>
+
+            <p>
+                Entre com suas credenciais para acessar
+                o gerenciamento da loja.
+            </p>
+
+        </div>
+
+
+        <!-- ERRO -->
+
+        <div
+                class="bp-admin-message bp-admin-message-error"
+                th:if="${param.erro}">
+
+            Usuário ou senha inválidos.
+
+        </div>
+
+
+        <!-- LOGOUT -->
+
+        <div
+                class="bp-admin-message bp-admin-message-success"
+                th:if="${param.logout}">
+
+            Sessão encerrada com sucesso.
+
+        </div>
+
+
+        <!-- FORMULÁRIO -->
+
+        <form
+                th:action="@{/admin/login}"
+                method="post"
+                class="bp-admin-login-form">
+
+
+            <input
+                    type="hidden"
+                    th:name="${_csrf.parameterName}"
+                    th:value="${_csrf.token}">
+
+
+            <div class="bp-admin-field">
+
+                <label for="username">
+                    Usuário
+                </label>
+
+                <input
+                        id="username"
+                        name="username"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="Digite seu usuário"
+                        required>
+
+            </div>
+
+
+            <div class="bp-admin-field">
+
+                <label for="password">
+                    Senha
+                </label>
+
+                <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="Digite sua senha"
+                        required>
+
+            </div>
+
+
+            <button
+                    type="submit"
+                    class="bp-admin-login-button">
+
+                Entrar
+
+                <span>
+                    →
+                </span>
+
+            </button>
+
+
+        </form>
+
+
+        <!-- VOLTAR -->
+
+        <a
+                th:href="@{/}"
+                class="bp-admin-back-link">
+
+            ← Voltar para a loja
+
+        </a>
+
+
+    </div>
+
+
+</main>
+
+
+</body>
+</html>

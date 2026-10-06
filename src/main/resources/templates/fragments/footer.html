@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer class="bp-footer"
+        th:fragment="publicFooter">
+    <div class="container bp-footer-content">
+        <!-- MARCA -->
+        <div class="bp-footer-brand">
+            <a class="bp-footer-logo"
+               th:href="@{/}">
+                <span class="bp-footer-logo-name">
+                    BIKE <strong>PADRÃO</strong>
+                </span>
+                <span class="bp-footer-logo-subtitle">
+                    PEÇAS &amp; ACESSÓRIOS
+                </span>
+            </a>
+            <p>
+                Bicicletas, componentes e acessórios
+                para quem leva o pedal a sério.
+            </p>
+        </div>
+        <!--  &lt;!&ndash; NAVEGAÇÃO &ndash;&gt;
+          <div class="bp-footer-navigation">
+              <span class="bp-footer-title">
+                  NAVEGAÇÃO
+              </span>
+              <a th:href="@{/}">
+                  Início
+              </a>
+              <a th:href="@{/produtos}">
+                  Catálogo
+              </a>
+              <a href="/#como-comprar">
+                  Como comprar
+              </a>
+              <a href="/#contato">
+                  Contato
+              </a>
+          </div>-->
+        <!-- CONTATO -->
+        <div class="bp-footer-info">
+            <span class="bp-footer-title">
+                CONTATO
+            </span>
+            <a href="tel:+551147617910">
+                Tel: (11) 4761-7910
+            </a>
+            <a href="https://wa.me/5511940619652"
+               rel="noopener noreferrer"
+               target="_blank">
+                WhatsApp: (11) 94061-9652
+            </a>
+        </div>
+        <div class="bp-footer-info">
+            <span class="bp-footer-title">ENDEREÇO</span>
+            <address>
+                Av. Ver. Narciso Yague Guimarães, 88<br>
+                Vila Partenio, Mogi das Cruzes – SP<br>
+                CEP 08780-200
+            </address>
+        </div>
+        <!-- HORÁRIO -->
+        <div class="bp-footer-info">
+            <span class="bp-footer-title">
+                ATENDIMENTO
+            </span>
+            <p><strong>Segunda a sexta</strong> 8h às 18h</p>
+            <p><strong>Sábado</strong> 8h às 13h</p>
+        </div>
+    </div>
+    <div class="bp-footer-bottom">
+        <div class="container">
+            © 2026 Bike Padrão. Todos os direitos reservados.
+        </div>
+    </div>
+</footer>
+</body>
+</html>

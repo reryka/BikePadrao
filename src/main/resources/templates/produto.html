@@ -72,12 +72,14 @@
 
                             <img
                                     id="imagem-principal"
-                                    class="bp-main-image"
+                                    class="bp-main-image bp-main-image-clickable"
                                     th:src="${produto.imagens[0].url}"
-                                    th:alt="${produto.nome}">
+                                    th:alt="${produto.nome}"
+                                    role="button"
+                                    tabindex="0"
+                                    aria-label="Ampliar imagem do produto">
 
                         </div>
-
 
                         <div class="bp-detail-thumbnails">
 
@@ -86,30 +88,18 @@
                                     class="bp-thumbnail-button"
                                     th:each="imagem, status : ${produto.imagens}"
                                     th:classappend="${status.index == 0} ? ' is-active' : ''"
-                                    onclick="
-                                    const galeria = this.closest('.bp-detail-gallery');
+                                    th:attr="data-index=${status.index}">
 
-                                    galeria
-                                        .querySelectorAll('.bp-thumbnail-button')
-                                        .forEach(botao =>
-                                            botao.classList.remove('is-active')
-                                        );
-
-                                    this.classList.add('is-active');
-
-                                    document
-                                        .getElementById('imagem-principal')
-                                        .src = this.querySelector('img').src;">
-                                        <img th:src="${imagem.url}" th:alt="${produto.nome}" class="bp-detail-thumbnail">
+                                <img
+                                        th:src="${imagem.url}"
+                                        th:alt="${produto.nome}"
+                                        class="bp-detail-thumbnail">
 
                             </button>
 
                         </div>
 
-
                     </div>
-
-
                     <div
                             th:if="${#lists.isEmpty(produto.imagens)}"
                             class="bp-detail-placeholder">
@@ -246,9 +236,66 @@
 
                     </div>
 
+                    <!-- =====================================================
+                     LIGHTBOX - GALERIA DO PRODUTO
+                     ===================================================== -->
+                    <div class="bp-product-lightbox"
+                         id="productLightbox"
+                         th:if="${!#lists.isEmpty(produto.imagens)}"
+                         hidden
+                         aria-hidden="true">
+
+                        <div class="bp-product-lightbox-backdrop"
+                             data-lightbox-close></div>
+
+                        <div class="bp-product-lightbox-content"
+                             role="dialog"
+                             aria-modal="true"
+                             aria-label="Galeria ampliada do produto">
+
+                            <!-- FECHAR -->
+                            <button type="button"
+                                    class="bp-product-lightbox-close"
+                                    id="lightboxClose"
+                                    aria-label="Fechar galeria">
+                                ×
+                            </button>
+
+                            <!-- ANTERIOR -->
+                            <button type="button"
+                                    class="bp-product-lightbox-navigation bp-product-lightbox-prev"
+                                    id="lightboxPrev"
+                                    aria-label="Imagem anterior">
+                                ‹
+                            </button>
+
+                            <!-- IMAGEM -->
+                            <div class="bp-product-lightbox-image-area">
+                                <img id="lightboxImage"
+                                     class="bp-product-lightbox-image"
+                                     src=""
+                                     alt="">
+                            </div>
+
+                            <!-- PRÓXIMA -->
+                            <button type="button"
+                                    class="bp-product-lightbox-navigation bp-product-lightbox-next"
+                                    id="lightboxNext"
+                                    aria-label="Próxima imagem">
+                                ›
+                            </button>
+
+                            <!-- CONTADOR -->
+                            <div class="bp-product-lightbox-counter">
+                                <span id="lightboxCurrent">1</span>
+                                <span>/
+                                </span>
+                                <span id="lightboxTotal">1</span>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- WHATSAPP -->
-
                     <a th:if="${produto.estoque > 0}"
                        class="bp-whatsapp-button"
                        th:href="${whatsappUrl}"
@@ -263,17 +310,11 @@
 
                     </a>
 
-
                     <p class="bp-whatsapp-help"
                        th:if="${produto.estoque > 0}">
-
                         Consulte disponibilidade, pagamento e retirada diretamente com a loja.
-
                     </p>
-
-
                 </div>
-
             </div>
 
 
@@ -359,11 +400,386 @@
 <div th:replace="~{fragments/whatsapp :: whatsappButton}"></div>
 
 <!-- =====================================================
-     FOOTER
-     ===================================================== -->
-
+ FOOTER
+ ===================================================== -->
 <div th:replace="~{fragments/footer :: publicFooter}"></div>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
 
+        const mainImage =
+            document.getElementById("imagem-principal");
+
+        const thumbnails =
+            Array.from(
+                document.querySelectorAll(
+                    ".bp-thumbnail-button"
+                )
+            );
+
+        const lightbox =
+            document.getElementById(
+                "productLightbox"
+            );
+
+
+        if (
+            !mainImage ||
+            thumbnails.length === 0 ||
+            !lightbox
+        ) {
+            return;
+        }
+
+
+        const lightboxImage =
+            document.getElementById(
+                "lightboxImage"
+            );
+
+        const lightboxClose =
+            document.getElementById(
+                "lightboxClose"
+            );
+
+        const lightboxPrev =
+            document.getElementById(
+                "lightboxPrev"
+            );
+
+        const lightboxNext =
+            document.getElementById(
+                "lightboxNext"
+            );
+
+        const lightboxCurrent =
+            document.getElementById(
+                "lightboxCurrent"
+            );
+
+        const lightboxTotal =
+            document.getElementById(
+                "lightboxTotal"
+            );
+
+
+        let currentIndex = 0;
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+
+        const images =
+            thumbnails.map(function (button) {
+
+                const image =
+                    button.querySelector("img");
+
+                return {
+                    src: image.src,
+                    alt: image.alt
+                };
+
+            });
+
+
+        lightboxTotal.textContent =
+            images.length;
+
+
+        /* =====================================================
+           TROCA DA IMAGEM PRINCIPAL
+           ===================================================== */
+
+        function selecionarImagem(index) {
+
+            currentIndex = index;
+
+            mainImage.src =
+                images[index].src;
+
+            mainImage.alt =
+                images[index].alt;
+
+
+            thumbnails.forEach(
+                function (button, buttonIndex) {
+
+                    button.classList.toggle(
+                        "is-active",
+                        buttonIndex === index
+                    );
+
+                }
+            );
+        }
+
+
+        thumbnails.forEach(
+            function (button, index) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        selecionarImagem(index);
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           LIGHTBOX
+           ===================================================== */
+
+        function atualizarLightbox() {
+
+            lightboxImage.src =
+                images[currentIndex].src;
+
+            lightboxImage.alt =
+                images[currentIndex].alt;
+
+            lightboxCurrent.textContent =
+                currentIndex + 1;
+
+        }
+
+
+        function abrirLightbox() {
+
+            atualizarLightbox();
+
+            lightbox.hidden = false;
+
+            lightbox.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+            document.body.classList.add(
+                "bp-lightbox-open"
+            );
+
+
+            lightboxClose.focus();
+        }
+
+
+        function fecharLightbox() {
+
+            lightbox.hidden = true;
+
+            lightbox.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            document.body.classList.remove(
+                "bp-lightbox-open"
+            );
+
+
+            mainImage.focus();
+        }
+
+
+        function imagemAnterior() {
+
+            currentIndex =
+                currentIndex === 0
+                    ? images.length - 1
+                    : currentIndex - 1;
+
+            atualizarLightbox();
+            selecionarImagem(currentIndex);
+        }
+
+
+        function proximaImagem() {
+
+            currentIndex =
+                currentIndex === images.length - 1
+                    ? 0
+                    : currentIndex + 1;
+
+            atualizarLightbox();
+            selecionarImagem(currentIndex);
+        }
+
+
+        /* =====================================================
+           ABRIR
+           ===================================================== */
+
+        mainImage.addEventListener(
+            "click",
+            abrirLightbox
+        );
+
+
+        mainImage.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+
+                    event.preventDefault();
+
+                    abrirLightbox();
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           FECHAR
+           ===================================================== */
+
+        lightboxClose.addEventListener(
+            "click",
+            fecharLightbox
+        );
+
+
+        document
+            .querySelectorAll(
+                "[data-lightbox-close]"
+            )
+            .forEach(function (element) {
+
+                element.addEventListener(
+                    "click",
+                    fecharLightbox
+                );
+
+            });
+
+
+        /* =====================================================
+           NAVEGAÇÃO
+           ===================================================== */
+
+        lightboxPrev.addEventListener(
+            "click",
+            imagemAnterior
+        );
+
+
+        lightboxNext.addEventListener(
+            "click",
+            proximaImagem
+        );
+
+
+        /* =====================================================
+           TECLADO
+           ===================================================== */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (lightbox.hidden) {
+                    return;
+                }
+
+
+                if (event.key === "Escape") {
+
+                    fecharLightbox();
+
+                }
+
+
+                if (event.key === "ArrowLeft") {
+
+                    imagemAnterior();
+
+                }
+
+
+                if (event.key === "ArrowRight") {
+
+                    proximaImagem();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           SWIPE MOBILE
+           ===================================================== */
+
+        lightboxImage.addEventListener(
+            "touchstart",
+            function (event) {
+
+                touchStartX =
+                    event.changedTouches[0].screenX;
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        lightboxImage.addEventListener(
+            "touchend",
+            function (event) {
+
+                touchEndX =
+                    event.changedTouches[0].screenX;
+
+
+                const distancia =
+                    touchEndX - touchStartX;
+
+
+                if (Math.abs(distancia) < 50) {
+                    return;
+                }
+
+
+                if (distancia > 0) {
+
+                    imagemAnterior();
+
+                } else {
+
+                    proximaImagem();
+
+                }
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        /* =====================================================
+           UMA ÚNICA IMAGEM
+           ===================================================== */
+
+        if (images.length === 1) {
+
+            lightboxPrev.hidden = true;
+            lightboxNext.hidden = true;
+
+        }
+
+    });
+</script>
 </body>
 </html>

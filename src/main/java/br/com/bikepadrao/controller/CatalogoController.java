@@ -35,6 +35,9 @@ public class CatalogoController {
             @RequestParam(required = false)
             String marca,
 
+            @RequestParam(required = false)
+            String ordem,
+
             Model model
     ) {
 
@@ -43,7 +46,8 @@ public class CatalogoController {
                 produtoService.listarCatalogo(
                         busca,
                         categoria,
-                        marca
+                        marca,
+                        ordem
                 )
         );
 
@@ -70,6 +74,13 @@ public class CatalogoController {
         model.addAttribute(
                 "marcaSelecionada",
                 marca
+        );
+
+        model.addAttribute(
+                "ordemSelecionada",
+                ordem == null || ordem.isBlank()
+                        ? "nome"
+                        : ordem
         );
 
         return "produtos";

@@ -302,6 +302,37 @@ public class AdminProdutoController {
         return "redirect:/admin/produtos";
     }
 
+    @PostMapping("/{id}/duplicar")
+    public String duplicar(
+            @PathVariable Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        try {
+
+            Produto copia =
+                    produtoAdminService.duplicar(id);
+
+            redirectAttributes.addFlashAttribute(
+                    "sucesso",
+                    "Produto duplicado com sucesso. Revise os dados antes de ativá-lo."
+            );
+
+            return "redirect:/admin/produtos/"
+                    + copia.getId()
+                    + "/editar";
+
+        } catch (IllegalArgumentException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "erro",
+                    e.getMessage()
+            );
+
+            return "redirect:/admin/produtos";
+        }
+    }
+
     @PostMapping("/lote")
     public String executarAcaoEmLote(
             @RequestParam(

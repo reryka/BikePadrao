@@ -11,34 +11,63 @@ import java.util.Optional;
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query("""
-            SELECT p
-            FROM Produto p
-            JOIN FETCH p.categoria c
-            LEFT JOIN FETCH p.marca m
-            WHERE p.ativo = true
-              AND c.ativo = true        
-              AND (
-                    :busca = ''
-                    OR LOWER(p.nome) LIKE CONCAT('%', :busca, '%')
-                    OR LOWER(p.sku) LIKE CONCAT('%', :busca, '%')
-                  )
-              AND (
-                    :categoria = ''
-                    OR c.slug = :categoria
-                  )
-             AND (
-                    :marca = ''
-                    OR (
-                        m.slug = :marca
-                        AND m.ativo = true
-                    )
-                  )                 
-            ORDER BY p.nome
-            """)
+        SELECT p
+        FROM Produto p
+        JOIN FETCH p.categoria c
+        LEFT JOIN FETCH p.marca m
+        WHERE p.ativo = true
+          AND c.ativo = true
+          AND (
+                :busca = ''
+                OR LOWER(p.nome) LIKE CONCAT('%', :busca, '%')
+                OR LOWER(p.sku) LIKE CONCAT('%', :busca, '%')
+              )
+          AND (
+                :categoria = ''
+                OR c.slug = :categoria
+              )
+          AND (
+                :marca = ''
+                OR (
+                    m.slug = :marca
+                    AND m.ativo = true
+                )
+              )
+        ORDER BY
+
+            CASE
+                WHEN :ordem = 'nome'
+                THEN LOWER(p.nome)
+            END ASC,
+
+            CASE
+                WHEN :ordem = 'menor-preco'
+                THEN COALESCE(
+                    p.precoPromocional,
+                    p.preco
+                )
+            END ASC,
+
+            CASE
+                WHEN :ordem = 'maior-preco'
+                THEN COALESCE(
+                    p.precoPromocional,
+                    p.preco
+                )
+            END DESC,
+
+            CASE
+                WHEN :ordem = 'recentes'
+                THEN p.dataCriacao
+            END DESC,
+
+            p.nome ASC
+        """)
     List<Produto> buscarCatalogo(
             @Param("busca") String busca,
             @Param("categoria") String categoria,
-            @Param("marca") String marca
+            @Param("marca") String marca,
+            @Param("ordem") String ordem
     );
 
 

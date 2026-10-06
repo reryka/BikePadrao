@@ -1181,7 +1181,7 @@ a {
 
     gap: 12px;
 
-    margin-bottom: 38px;
+    margin-bottom: 16px;
 
     padding: 18px;
 
@@ -1319,21 +1319,72 @@ a {
     color: var(--bp-pink);
 }
 
+/* =========================================================
+   CATÁLOGO - ORDENAÇÃO
+   ========================================================= */
 
-/* RESPONSIVIDADE */
-
-@media (max-width: 850px) {
-
-    .bp-catalog-page .catalog-filter {
-        grid-template-columns:
-            1fr 1fr;
-    }
-
+.bp-catalog-sort {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-bottom: 38px;
 }
 
+.bp-catalog-sort-label {
+    color: var(--bp-text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.bp-catalog-sort-buttons {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.bp-catalog-sort-button {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    border: 1px solid #dce1de;
+    border-radius: 8px;
+    background: #ffffff;
+    color: var(--bp-text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: var(--bp-transition);
+}
+
+.bp-catalog-sort-button:hover {
+    border-color: var(--bp-blue);
+    color: var(--bp-blue);
+    transform: translateY(-1px);
+}
+
+.bp-catalog-sort-button.is-active {
+    border-color: transparent;
+    background: var(--bp-gradient);
+    color: #ffffff;
+    box-shadow: 0 5px 14px rgba(10, 147, 237, 0.12);
+}
+
+/* RESPONSIVIDADE CATALOGO */
+@media (max-width: 850px) {
+    .bp-catalog-page .catalog-filter {
+        grid-template-columns:1fr 1fr;
+    }
+    .bp-catalog-sort {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
 
 @media (max-width: 600px) {
-
     .bp-catalog-page .section-title {
         font-size: 2rem;
     }
@@ -1346,7 +1397,13 @@ a {
     .bp-catalog-page .filter-clear {
         width: 100%;
     }
+    .bp-catalog-sort-buttons {
+        width: 100%;
+    }
 
+    .bp-catalog-sort-button {
+        flex: 1 1 calc(50% - 7px);
+    }
 }
 
 /* =========================================================
@@ -2920,26 +2977,55 @@ a {
     font-size: 0.85rem;
 }
 
+/* =========================================================
+   ADMIN - ESTOQUE
+   ========================================================= */
 
 .bp-admin-stock {
     min-width: 32px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 4px 8px;
-
     border-radius: 6px;
-
     background: #f2f4f3;
-
     color: #59615c;
-
     font-size: 0.77rem;
     font-weight: 700;
+    gap: 7px;
 }
 
+/* QUANTIDADE */
+.bp-admin-stock-value {
+    font-weight: 800;
+}
+
+/* TEXTO AUXILIAR */
+.bp-admin-stock-label {
+    font-size: 0.66rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+/* ESTOQUE NORMAL */
+.bp-admin-stock-normal {
+    background: #edf9f1;
+    color: #277947;
+}
+
+/* ESTOQUE BAIXO */
+.bp-admin-stock-low {
+    background: #fff5dd;
+    color: #a66b00;
+    border: 1px solid #f3dfaa;
+}
+
+/* SEM ESTOQUE */
+.bp-admin-stock-empty {
+    background: #fff0f0;
+    color: #b33d3d;
+    border: 1px solid #f1cccc;
+}
 
 /* =========================================================
    ADMIN - STATUS
@@ -3018,22 +3104,17 @@ a {
 
 
 .bp-admin-edit-button,
+.bp-admin-duplicate-button,
 .bp-admin-status-button {
     min-height: 35px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 0 12px;
-
     border-radius: 7px;
-
     font-size: 0.74rem;
     font-weight: 700;
-
     cursor: pointer;
-
     transition: var(--bp-transition);
 }
 
@@ -3059,6 +3140,24 @@ a {
     border-color: var(--bp-blue);
 }
 
+/* DUPLICAR */
+
+.bp-admin-duplicate-button {
+    border: 1px solid rgba(110, 86, 207, 0.24);
+
+    background: rgba(110, 86, 207, 0.05);
+
+    color: #685ed7;
+}
+
+
+.bp-admin-duplicate-button:hover {
+    background: #685ed7;
+
+    border-color: #685ed7;
+
+    color: #ffffff;
+}
 
 /* ATIVAR / DESATIVAR */
 
@@ -5461,6 +5560,312 @@ a {
     .bp-admin-bulk-select,
     .bp-admin-bulk-apply {
         width: 100%;
+    }
+
+}
+
+/* =========================================================
+   PRODUTO - LIGHTBOX
+   ========================================================= */
+
+.bp-main-image-clickable {
+    cursor: zoom-in;
+}
+
+
+.bp-main-image-clickable:focus-visible {
+    outline: 3px solid rgba(10, 147, 237, 0.35);
+    outline-offset: 4px;
+}
+
+
+.bp-lightbox-open {
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   ESTRUTURA
+   ========================================================= */
+
+.bp-product-lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 32px;
+}
+
+
+.bp-product-lightbox[hidden] {
+    display: none;
+}
+
+
+.bp-product-lightbox-backdrop {
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.88);
+
+    backdrop-filter: blur(4px);
+
+    cursor: zoom-out;
+}
+
+
+.bp-product-lightbox-content {
+    position: relative;
+
+    z-index: 1;
+
+    width: min(1100px, 100%);
+    height: min(820px, calc(100vh - 64px));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   IMAGEM
+   ========================================================= */
+
+.bp-product-lightbox-image-area {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 55px 85px;
+
+    pointer-events: none;
+}
+
+
+.bp-product-lightbox-image {
+    display: block;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+
+    user-select: none;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   FECHAR
+   ========================================================= */
+
+.bp-product-lightbox-close {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    z-index: 3;
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 50%;
+
+    background: rgba(20, 20, 20, 0.65);
+
+    color: #ffffff;
+
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    transition: var(--bp-transition);
+}
+
+
+.bp-product-lightbox-close:hover {
+    background: #ffffff;
+
+    color: #111111;
+
+    transform: scale(1.05);
+}
+
+
+/* =========================================================
+   SETAS
+   ========================================================= */
+
+.bp-product-lightbox-navigation {
+    position: absolute;
+
+    top: 50%;
+
+    z-index: 3;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 50%;
+
+    background: rgba(20, 20, 20, 0.65);
+
+    color: #ffffff;
+
+    font-size: 2.3rem;
+    font-weight: 300;
+    line-height: 1;
+
+    cursor: pointer;
+
+    pointer-events: auto;
+
+    transform: translateY(-50%);
+
+    transition: var(--bp-transition);
+}
+
+
+.bp-product-lightbox-navigation:hover {
+    background: #ffffff;
+
+    color: #111111;
+}
+
+
+.bp-product-lightbox-prev {
+    left: 0;
+}
+
+
+.bp-product-lightbox-next {
+    right: 0;
+}
+
+
+/* =========================================================
+   CONTADOR
+   ========================================================= */
+
+.bp-product-lightbox-counter {
+    position: absolute;
+
+    bottom: 0;
+    left: 50%;
+
+    z-index: 3;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 8px 13px;
+
+    background: rgba(20, 20, 20, 0.70);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+
+    color: #ffffff;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    transform: translateX(-50%);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .bp-product-lightbox {
+        padding: 15px;
+    }
+
+
+    .bp-product-lightbox-content {
+        height: calc(100vh - 30px);
+    }
+
+
+    .bp-product-lightbox-image-area {
+        padding: 65px 15px;
+    }
+
+
+    .bp-product-lightbox-close {
+        top: 8px;
+        right: 8px;
+
+        width: 42px;
+        height: 42px;
+    }
+
+
+    .bp-product-lightbox-navigation {
+        width: 44px;
+        height: 44px;
+
+        font-size: 1.9rem;
+
+        background: rgba(20, 20, 20, 0.72);
+    }
+
+
+    .bp-product-lightbox-prev {
+        left: 4px;
+    }
+
+
+    .bp-product-lightbox-next {
+        right: 4px;
+    }
+
+
+    .bp-product-lightbox-counter {
+        bottom: 10px;
     }
 
 }

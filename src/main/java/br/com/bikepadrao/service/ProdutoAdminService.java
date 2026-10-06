@@ -5,6 +5,7 @@ import br.com.bikepadrao.dto.ProdutoFormDTO;
 import br.com.bikepadrao.entity.Categoria;
 import br.com.bikepadrao.entity.Marca;
 import br.com.bikepadrao.entity.Produto;
+import br.com.bikepadrao.entity.ProdutoEspecificacao;
 import br.com.bikepadrao.repository.CategoriaRepository;
 import br.com.bikepadrao.repository.MarcaRepository;
 import br.com.bikepadrao.repository.ProdutoRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 import br.com.bikepadrao.storage.ImagemStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -189,6 +191,62 @@ public class ProdutoAdminService {
         preencherProduto(produto, dto);
     }
 
+    @Transactional
+    public Produto duplicar(Long id) {
+
+        Produto original =
+                produtoRepository
+                        .buscarAdminPorId(id)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "Produto não encontrado."
+                                )
+                        );
+
+        Produto copia = new Produto();
+
+         /* =====================================================
+       DADOS PRINCIPAIS
+       ===================================================== */
+        copia.setNome(gerarNomeDuplicado(original.getNome()));
+        copia.setSlug(gerarSlugDuplicado(original.getSlug()));
+        copia.setSku(gerarSkuDuplicado(original.getSku()));
+        copia.setDescricaoCurta(original.getDescricaoCurta());
+        copia.setDescricao(original.getDescricao());
+        copia.setPreco(original.getPreco());
+        copia.setPrecoPromocional(original.getPrecoPromocional());
+        copia.setEstoque(original.getEstoque());
+
+        /*
+         * A cópia começa desativada para não aparecer
+         * no site antes de ser revisada.
+         */
+        copia.setAtivo(false);
+        copia.setDestaque(false);
+        copia.setCategoria(original.getCategoria());
+        copia.setMarca(original.getMarca());
+
+        /* =====================================================
+       ESPECIFICAÇÕES
+       ===================================================== */
+        original.getEspecificacoes().forEach(especificacaoOriginal -> {
+                    ProdutoEspecificacao especificacao = new ProdutoEspecificacao();
+                    especificacao.setProduto(copia);
+                    especificacao.setNome(especificacaoOriginal.getNome());
+                    especificacao.setValor(especificacaoOriginal.getValor());
+                    especificacao.setOrdem(especificacaoOriginal.getOrdem());
+                    copia.getEspecificacoes().add(especificacao);
+                });
+
+        /*
+         * As imagens NÃO são copiadas.
+         *
+         * Isso evita que dois produtos compartilhem
+         * o mesmo arquivo físico e uma exclusão futura
+         * remova a imagem utilizada pelo outro produto.
+         */
+        return produtoRepository.save(copia);
+    }
 
     @Transactional
     public void alternarStatus(Long id) {
@@ -388,9 +446,51 @@ public class ProdutoAdminService {
                 );
     }
 
-    private void preencherProduto(
-            Produto produto,
-            ProdutoFormDTO dto
+    private String gerarNomeDuplicado(String nomeOriginal) {
+        String sufixo = " - Cópia";
+        int tamanhoMaximo = 200 - sufixo.length();
+        String base = nomeOriginal.length() > tamanhoMaximo
+                        ? nomeOriginal.substring(0, tamanhoMaximo)
+                        : nomeOriginal;
+        return base + sufixo;
+    }
+
+    private String gerarSlugDuplicado(String slugOriginal) {
+        String base = slugOriginal;
+        String slug = limitarTexto(base, 214) + "-copia";
+        int numero = 2;
+
+        while (produtoRepository.existsBySlug(slug)) {
+            String sufixo = "-copia-" + numero;
+            slug = limitarTexto(base, 220 - sufixo.length()) + sufixo;
+            numero++;
+        }
+        return slug;
+    }
+
+
+    private String gerarSkuDuplicado(String skuOriginal) {
+        String base = skuOriginal;
+        String sku = limitarTexto(base, 45) + "-COPY";
+        int numero = 2;
+
+        while (produtoRepository.existsBySku(sku)) {
+            String sufixo = "-COPY-" + numero;
+            sku = limitarTexto(base, 50 - sufixo.length()) + sufixo;
+            numero++;
+        }
+        return sku;
+    }
+
+
+    private String limitarTexto(String texto, int tamanhoMaximo) {
+        if (texto.length() <= tamanhoMaximo) {
+            return texto;
+        }
+        return texto.substring(0, tamanhoMaximo);
+    }
+
+    private void preencherProduto(Produto produto, ProdutoFormDTO dto
     ) {
 
         Categoria categoria =

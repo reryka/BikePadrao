@@ -32,18 +32,21 @@ public class ProdutoService {
     public List<ProdutoCardDTO> listarCatalogo(
             String busca,
             String categoria,
-            String marca
+            String marca,
+            String ordem
     ) {
 
         busca = normalizarBusca(busca);
         categoria = normalizarFiltro(categoria);
         marca = normalizarFiltro(marca);
+        ordem = normalizarOrdem(ordem);
 
         List<Produto> produtos =
                 produtoRepository.buscarCatalogo(
                         busca,
                         categoria,
-                        marca
+                        marca,
+                        ordem
                 );
 
         return paraCards(produtos);
@@ -230,5 +233,22 @@ public class ProdutoService {
         }
 
         return filtro.trim();
+    }
+
+    private String normalizarOrdem(String ordem) {
+
+        if (ordem == null || ordem.isBlank()) {
+            return "nome";
+        }
+
+        return switch (ordem) {
+
+            case "menor-preco",
+                 "maior-preco",
+                 "recentes",
+                 "nome" -> ordem;
+
+            default -> "nome";
+        };
     }
 }

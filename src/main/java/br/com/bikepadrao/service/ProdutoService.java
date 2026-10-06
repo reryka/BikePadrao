@@ -204,8 +204,14 @@ public class ProdutoService {
 
                 produto.getCategoria().getNome(),
 
+                produto.getCategoria().getSlug(),
+
                 produto.getMarca() != null
                         ? produto.getMarca().getNome()
+                        : null,
+
+                produto.getMarca() != null
+                        ? produto.getMarca().getSlug()
                         : null,
 
                 imagens,

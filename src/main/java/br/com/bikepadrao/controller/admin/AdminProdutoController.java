@@ -50,19 +50,52 @@ public class AdminProdutoController {
             @RequestParam(required = false)
             Boolean destaque,
 
+            @RequestParam(
+                    required = false,
+                    defaultValue = "0"
+            )
+            int pagina,
+
             Model model
     ) {
 
-        model.addAttribute(
-                "produtos",
+        var paginaProdutos =
                 produtoAdminService.listar(
                         busca,
                         categoriaId,
                         marcaId,
                         ativo,
-                        destaque
-                )
+                        destaque,
+                        pagina
+                );
+
+
+        model.addAttribute("produtos", paginaProdutos.getContent());
+        model.addAttribute(
+                "paginaAtual",
+                paginaProdutos.getNumber()
         );
+
+        model.addAttribute(
+                "totalPaginas",
+                paginaProdutos.getTotalPages()
+        );
+
+        model.addAttribute(
+                "totalProdutos",
+                paginaProdutos.getTotalElements()
+        );
+
+        model.addAttribute(
+                "primeiraPagina",
+                paginaProdutos.isFirst()
+        );
+
+        model.addAttribute(
+                "ultimaPagina",
+                paginaProdutos.isLast()
+        );
+
 
         model.addAttribute(
                 "categorias",
@@ -98,6 +131,7 @@ public class AdminProdutoController {
                 "destaqueSelecionado",
                 destaque
         );
+
 
         return "admin/produtos/lista";
     }
@@ -490,6 +524,37 @@ public class AdminProdutoController {
                 + "/editar";
     }
 
+    @PostMapping(
+            "/{produtoId}/imagens/{imagemId}/mover"
+    )
+    public String moverImagem(
+            @PathVariable Long produtoId,
+            @PathVariable Long imagemId,
+            @RequestParam String direcao,
+            RedirectAttributes redirectAttributes
+    ) {
+
+        try {
+
+            produtoImagemService.mover(
+                    produtoId,
+                    imagemId,
+                    direcao
+            );
+
+        } catch (IllegalArgumentException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "erro",
+                    e.getMessage()
+            );
+        }
+
+
+        return "redirect:/admin/produtos/"
+                + produtoId
+                + "/editar";
+    }
 
     @PostMapping(
             "/{produtoId}/imagens/{imagemId}/excluir"

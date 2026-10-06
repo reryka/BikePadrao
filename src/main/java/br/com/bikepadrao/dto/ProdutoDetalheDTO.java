@@ -30,7 +30,11 @@ public class ProdutoDetalheDTO {
 
     private String categoria;
 
+    private String categoriaSlug;
+
     private String marca;
+
+    private String marcaSlug;
 
     private List<ProdutoImagemDTO> imagens;
 

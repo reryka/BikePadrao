@@ -10,6 +10,8 @@ import br.com.bikepadrao.repository.CategoriaRepository;
 import br.com.bikepadrao.repository.MarcaRepository;
 import br.com.bikepadrao.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,8 @@ public class ProdutoAdminService {
     private final CategoriaRepository categoriaRepository;
     private final MarcaRepository marcaRepository;
     private final ImagemStorageService imagemStorageService;
+
+    private static final int TAMANHO_PAGINA = 10;
 
     @Transactional(readOnly = true)
     public List<ProdutoAdminDTO> listarTodos() {
@@ -51,20 +55,23 @@ public class ProdutoAdminService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProdutoAdminDTO> listar(String busca) {
+    public Page<ProdutoAdminDTO> listar(
+            String busca
+    ) {
 
         return listar(
                 busca,
                 null,
                 null,
                 null,
-                null
+                null,
+                0
         );
     }
 
 
     @Transactional(readOnly = true)
-    public List<ProdutoAdminDTO> listar(
+    public Page<ProdutoAdminDTO> listar(
             String busca,
             Long categoriaId,
             Long marcaId,
@@ -72,13 +79,52 @@ public class ProdutoAdminService {
             Boolean destaque
     ) {
 
+        return listar(
+                busca,
+                categoriaId,
+                marcaId,
+                ativo,
+                destaque,
+                0
+        );
+    }
+
+
+    @Transactional(readOnly = true)
+    public Page<ProdutoAdminDTO> listar(
+            String busca,
+            Long categoriaId,
+            Long marcaId,
+            Boolean ativo,
+            Boolean destaque,
+            int pagina
+    ) {
+
         if (busca == null || busca.isBlank()) {
+
             busca = "";
+
         } else {
+
             busca = busca
                     .trim()
                     .toLowerCase();
         }
+
+
+        int paginaSegura =
+                Math.max(
+                        pagina,
+                        0
+                );
+
+
+        PageRequest pageable =
+                PageRequest.of(
+                        paginaSegura,
+                        TAMANHO_PAGINA
+                );
+
 
         return produtoRepository
                 .buscarAdmin(
@@ -86,9 +132,9 @@ public class ProdutoAdminService {
                         categoriaId,
                         marcaId,
                         ativo,
-                        destaque
+                        destaque,
+                        pageable
                 )
-                .stream()
                 .map(produto ->
                         new ProdutoAdminDTO(
                                 produto.getId(),
@@ -99,8 +145,7 @@ public class ProdutoAdminService {
                                 produto.getAtivo(),
                                 produto.getDestaque()
                         )
-                )
-                .toList();
+                );
     }
 
     @Transactional(readOnly = true)

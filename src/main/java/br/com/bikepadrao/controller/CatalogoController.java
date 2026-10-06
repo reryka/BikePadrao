@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 @RequiredArgsConstructor
@@ -113,6 +114,30 @@ public class CatalogoController {
                 "whatsappUrl",
                 whatsAppService
                         .criarLinkProduto(produto)
+        );
+
+        String canonicalUrl =
+                ServletUriComponentsBuilder
+                        .fromCurrentRequestUri()
+                        .build()
+                        .toUriString();
+
+
+        String siteUrl =
+                ServletUriComponentsBuilder
+                        .fromCurrentContextPath()
+                        .build()
+                        .toUriString();
+
+
+        model.addAttribute(
+                "canonicalUrl",
+                canonicalUrl
+        );
+
+        model.addAttribute(
+                "siteUrl",
+                siteUrl
         );
 
         return "produto";

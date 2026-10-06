@@ -1,6 +1,8 @@
 package br.com.bikepadrao.repository;
 
 import br.com.bikepadrao.entity.Produto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -108,38 +110,67 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
             @Param("id") Long id
     );
 
-    @Query("""
-        SELECT p
-        FROM Produto p
-        WHERE (
-            :busca = ''
-            OR LOWER(p.nome) LIKE CONCAT('%', :busca, '%')
-            OR LOWER(p.sku) LIKE CONCAT('%', :busca, '%')
-        )
-        AND (
-            :categoriaId IS NULL
-            OR p.categoria.id = :categoriaId
-        )
-        AND (
-            :marcaId IS NULL
-            OR p.marca.id = :marcaId
-        )
-        AND (
-            :ativo IS NULL
-            OR p.ativo = :ativo
-        )
-        AND (
-            :destaque IS NULL
-            OR p.destaque = :destaque
-        )
-        ORDER BY p.nome
-        """)
-    List<Produto> buscarAdmin(
+    @Query(
+            value = """
+            SELECT p
+            FROM Produto p
+            WHERE (
+                :busca = ''
+                OR LOWER(p.nome) LIKE CONCAT('%', :busca, '%')
+                OR LOWER(p.sku) LIKE CONCAT('%', :busca, '%')
+            )
+            AND (
+                :categoriaId IS NULL
+                OR p.categoria.id = :categoriaId
+            )
+            AND (
+                :marcaId IS NULL
+                OR p.marca.id = :marcaId
+            )
+            AND (
+                :ativo IS NULL
+                OR p.ativo = :ativo
+            )
+            AND (
+                :destaque IS NULL
+                OR p.destaque = :destaque
+            )
+            ORDER BY p.nome
+            """,
+
+            countQuery = """
+            SELECT COUNT(p)
+            FROM Produto p
+            WHERE (
+                :busca = ''
+                OR LOWER(p.nome) LIKE CONCAT('%', :busca, '%')
+                OR LOWER(p.sku) LIKE CONCAT('%', :busca, '%')
+            )
+            AND (
+                :categoriaId IS NULL
+                OR p.categoria.id = :categoriaId
+            )
+            AND (
+                :marcaId IS NULL
+                OR p.marca.id = :marcaId
+            )
+            AND (
+                :ativo IS NULL
+                OR p.ativo = :ativo
+            )
+            AND (
+                :destaque IS NULL
+                OR p.destaque = :destaque
+            )
+            """
+    )
+    Page<Produto> buscarAdmin(
             @Param("busca") String busca,
             @Param("categoriaId") Long categoriaId,
             @Param("marcaId") Long marcaId,
             @Param("ativo") Boolean ativo,
-            @Param("destaque") Boolean destaque
+            @Param("destaque") Boolean destaque,
+            Pageable pageable
     );
 
     boolean existsBySku(String sku);

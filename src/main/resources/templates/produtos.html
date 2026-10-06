@@ -105,21 +105,37 @@
             </form>
 
             <div class="bp-catalog-sort">
+                <div class="bp-catalog-result-count"
+                     th:unless="${#lists.isEmpty(produtos)}">
 
-    <span class="bp-catalog-sort-label">
-        Ordenar por:
-    </span>
+                    <strong th:text="${#lists.size(produtos)}">
+                        0
+                    </strong>
+
+                    <span th:text="${#lists.size(produtos) == 1
+                        ? 'produto encontrado'
+                        : 'produtos encontrados'}">
+
+                        produtos encontrados
+
+                    </span>
+
+                </div>
+
+                <span class="bp-catalog-sort-label">
+                    Ordenar por:
+                </span>
 
                 <div class="bp-catalog-sort-buttons">
 
                     <a class="bp-catalog-sort-button"
                        th:classappend="${ordemSelecionada == 'nome'} ? ' is-active' : ''"
                        th:href="@{/produtos(
-                busca=${busca},
-                categoria=${categoriaSelecionada},
-                marca=${marcaSelecionada},
-                ordem='nome'
-           )}">
+                            busca=${busca},
+                            categoria=${categoriaSelecionada},
+                            marca=${marcaSelecionada},
+                            ordem='nome'
+                       )}">
                         Nome
                     </a>
 
@@ -127,11 +143,11 @@
                     <a class="bp-catalog-sort-button"
                        th:classappend="${ordemSelecionada == 'menor-preco'} ? ' is-active' : ''"
                        th:href="@{/produtos(
-                busca=${busca},
-                categoria=${categoriaSelecionada},
-                marca=${marcaSelecionada},
-                ordem='menor-preco'
-           )}">
+                            busca=${busca},
+                            categoria=${categoriaSelecionada},
+                            marca=${marcaSelecionada},
+                            ordem='menor-preco'
+                       )}">
                         Menor preço
                     </a>
 
@@ -139,11 +155,11 @@
                     <a class="bp-catalog-sort-button"
                        th:classappend="${ordemSelecionada == 'maior-preco'} ? ' is-active' : ''"
                        th:href="@{/produtos(
-                busca=${busca},
-                categoria=${categoriaSelecionada},
-                marca=${marcaSelecionada},
-                ordem='maior-preco'
-           )}">
+                            busca=${busca},
+                            categoria=${categoriaSelecionada},
+                            marca=${marcaSelecionada},
+                            ordem='maior-preco'
+                       )}">
                         Maior preço
                     </a>
 
@@ -151,23 +167,39 @@
                     <a class="bp-catalog-sort-button"
                        th:classappend="${ordemSelecionada == 'recentes'} ? ' is-active' : ''"
                        th:href="@{/produtos(
-                busca=${busca},
-                categoria=${categoriaSelecionada},
-                marca=${marcaSelecionada},
-                ordem='recentes'
-           )}">
+                            busca=${busca},
+                            categoria=${categoriaSelecionada},
+                            marca=${marcaSelecionada},
+                            ordem='recentes'
+                       )}">
                         Mais recentes
                     </a>
 
                 </div>
 
             </div>
-            
+
             <!-- =================================================
                  NENHUM PRODUTO
                  ================================================= -->
             <div class="bp-empty-state" th:if="${#lists.isEmpty(produtos)}">
-                Nenhum produto encontrado com os filtros selecionados.
+
+                <div class="bp-empty-state-icon">
+                    ⌕
+                </div>
+                <h2>
+                    Nenhum produto encontrado
+                </h2>
+                <p>
+                    Não encontramos produtos com os filtros selecionados.
+                    Tente alterar a busca, categoria ou marca.
+                </p>
+
+                <a class="button"
+                   th:href="@{/produtos}">
+                    Limpar filtros
+                </a>
+
             </div>
 
             <!-- =================================================

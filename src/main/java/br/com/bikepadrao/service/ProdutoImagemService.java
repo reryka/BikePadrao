@@ -115,6 +115,107 @@ public class ProdutoImagemService {
     }
 
     @Transactional
+    public void mover(
+            Long produtoId,
+            Long imagemId,
+            String direcao
+    ) {
+
+        List<ProdutoImagem> imagens =
+                produtoImagemRepository
+                        .findByProdutoIdOrderByOrdemAsc(
+                                produtoId
+                        );
+
+
+        int indiceAtual = -1;
+
+
+        for (int i = 0; i < imagens.size(); i++) {
+
+            if (
+                    imagens
+                            .get(i)
+                            .getId()
+                            .equals(imagemId)
+            ) {
+
+                indiceAtual = i;
+                break;
+            }
+        }
+
+
+        if (indiceAtual == -1) {
+
+            throw new IllegalArgumentException(
+                    "Imagem não encontrada para este produto."
+            );
+        }
+
+
+        int indiceDestino;
+
+
+        switch (direcao) {
+
+            case "cima" ->
+                    indiceDestino =
+                            indiceAtual - 1;
+
+            case "baixo" ->
+                    indiceDestino =
+                            indiceAtual + 1;
+
+            default ->
+                    throw new IllegalArgumentException(
+                            "Direção inválida."
+                    );
+        }
+
+
+        /*
+         * Se já estiver na primeira ou última posição,
+         * não há nada para mover.
+         */
+
+        if (
+                indiceDestino < 0 ||
+                        indiceDestino >= imagens.size()
+        ) {
+
+            return;
+        }
+
+
+        ProdutoImagem atual =
+                imagens.get(indiceAtual);
+
+        ProdutoImagem destino =
+                imagens.get(indiceDestino);
+
+
+        int ordemAtual =
+                atual.getOrdem();
+
+        int ordemDestino =
+                destino.getOrdem();
+
+
+        atual.setOrdem(
+                ordemDestino
+        );
+
+        destino.setOrdem(
+                ordemAtual
+        );
+
+
+        produtoImagemRepository.save(atual);
+        produtoImagemRepository.save(destino);
+    }
+    
+    @Transactional
     public void excluir(
             Long produtoId,
             Long imagemId

@@ -9,9 +9,108 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title th:text="${produto.nome + ' | BikePadrao'}">
+
+    <!-- =====================================================
+         SEO
+         ===================================================== -->
+
+    <title th:text="${produto.nome + ' | Bike Padrão'}">
         Produto | Bike Padrão
     </title>
+
+
+    <meta
+            name="description"
+            th:content="${produto.descricaoCurta != null
+                and !#strings.isEmpty(#strings.trim(produto.descricaoCurta))
+                ? produto.descricaoCurta
+                : 'Confira ' + produto.nome + ' na Bike Padrão.'}">
+
+
+    <link
+            rel="canonical"
+            th:href="${canonicalUrl}">
+
+
+    <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
+    <meta
+            property="og:type"
+            content="product">
+
+    <meta
+            property="og:site_name"
+            content="Bike Padrão">
+
+    <meta
+            property="og:locale"
+            content="pt_BR">
+
+    <meta
+            property="og:title"
+            th:content="${produto.nome + ' | Bike Padrão'}">
+
+    <meta
+            property="og:description"
+            th:content="${produto.descricaoCurta != null
+                and !#strings.isEmpty(#strings.trim(produto.descricaoCurta))
+                ? produto.descricaoCurta
+                : 'Confira ' + produto.nome + ' na Bike Padrão.'}">
+
+    <meta
+            property="og:url"
+            th:content="${canonicalUrl}">
+
+
+    <!-- IMAGEM DO PRODUTO -->
+
+    <meta
+            property="og:image"
+            th:if="${!#lists.isEmpty(produto.imagens)}"
+            th:content="${#strings.startsWith(produto.imagens[0].url, 'http')
+                ? produto.imagens[0].url
+                : siteUrl + produto.imagens[0].url}">
+
+    <meta
+            property="og:image:alt"
+            th:if="${!#lists.isEmpty(produto.imagens)}"
+            th:content="${produto.nome}">
+
+
+    <!-- =====================================================
+         TWITTER / X
+         ===================================================== -->
+
+    <meta
+            name="twitter:card"
+            th:content="${!#lists.isEmpty(produto.imagens)
+                ? 'summary_large_image'
+                : 'summary'}">
+
+    <meta
+            name="twitter:title"
+            th:content="${produto.nome + ' | Bike Padrão'}">
+
+    <meta
+            name="twitter:description"
+            th:content="${produto.descricaoCurta != null
+                and !#strings.isEmpty(#strings.trim(produto.descricaoCurta))
+                ? produto.descricaoCurta
+                : 'Confira ' + produto.nome + ' na Bike Padrão.'}">
+
+    <meta
+            name="twitter:image"
+            th:if="${!#lists.isEmpty(produto.imagens)}"
+            th:content="${#strings.startsWith(produto.imagens[0].url, 'http')
+                ? produto.imagens[0].url
+                : siteUrl + produto.imagens[0].url}">
+
+
+    <!-- =====================================================
+         CSS
+         ===================================================== -->
 
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
@@ -41,15 +140,56 @@
 
         <div class="container">
 
+            <!-- =================================================
+             BREADCRUMB
+             ================================================= -->
 
-            <!-- VOLTAR -->
+            <nav class="bp-product-breadcrumb"
+                 aria-label="Navegação estrutural">
 
-            <a th:href="@{/produtos}"
-               class="bp-product-back">
+                <a th:href="@{/}">
+                    Início
+                </a>
 
-                ← Voltar ao catálogo
+                <span class="bp-product-breadcrumb-separator">
+                    ›
+                </span>
 
-            </a>
+
+                <a th:href="@{/produtos(categoria=${produto.categoriaSlug})}"
+                   th:text="${produto.categoria}">
+                    Categoria
+                </a>
+
+
+                <th:block th:if="${produto.marca != null}">
+
+                <span class="bp-product-breadcrumb-separator">
+                    ›
+                </span>
+
+                    <a th:href="@{/produtos(
+                        categoria=${produto.categoriaSlug},
+                        marca=${produto.marcaSlug}
+                        )}"
+                       th:text="${produto.marca}">
+                        Marca
+                    </a>
+
+                </th:block>
+
+
+                <span class="bp-product-breadcrumb-separator">
+                    ›
+                </span>
+
+                <span class="bp-product-breadcrumb-current"
+                      th:text="${produto.nome}"
+                      aria-current="page">
+                    Produto
+                </span>
+
+            </nav>
 
 
             <!-- ÁREA PRINCIPAL -->
@@ -314,6 +454,36 @@
                        th:if="${produto.estoque > 0}">
                         Consulte disponibilidade, pagamento e retirada diretamente com a loja.
                     </p>
+
+                    <!-- COMPARTILHAR -->
+
+                    <div class="bp-product-share">
+
+                        <span class="bp-product-share-label">
+                            Compartilhar:
+                        </span>
+
+                        <button
+                                type="button"
+                                class="bp-product-share-button"
+                                id="shareWhatsapp"
+                                th:attr="data-produto-nome=${produto.nome}">
+
+                            WhatsApp
+
+                        </button>
+
+
+                        <button
+                                type="button"
+                                class="bp-product-share-button"
+                                id="copyProductLink">
+
+                            Copiar link
+
+                        </button>
+
+                    </div>
                 </div>
             </div>
 
@@ -780,6 +950,131 @@
         }
 
     });
+</script>
+
+<script>
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const shareWhatsapp =
+                document.getElementById(
+                    "shareWhatsapp"
+                );
+
+            const copyProductLink =
+                document.getElementById(
+                    "copyProductLink"
+                );
+
+
+            /* =====================================================
+               COMPARTILHAR PELO WHATSAPP
+               ===================================================== */
+
+            if (shareWhatsapp) {
+
+                shareWhatsapp.addEventListener(
+                    "click",
+                    function () {
+
+                        const nomeProduto =
+                            shareWhatsapp.dataset.produtoNome;
+
+                        const url =
+                            window.location.href;
+
+                        const mensagem =
+                            "Olha este produto da Bike Padrão: "
+                            + nomeProduto
+                            + "\n"
+                            + url;
+
+                        const whatsappUrl =
+                            "https://wa.me/?text="
+                            + encodeURIComponent(
+                                mensagem
+                            );
+
+                        window.open(
+                            whatsappUrl,
+                            "_blank",
+                            "noopener,noreferrer"
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /* =====================================================
+               COPIAR LINK
+               ===================================================== */
+
+            if (copyProductLink) {
+
+                copyProductLink.addEventListener(
+                    "click",
+                    async function () {
+
+                        const textoOriginal =
+                            copyProductLink.textContent;
+
+
+                        try {
+
+                            await navigator.clipboard.writeText(
+                                window.location.href
+                            );
+
+                            copyProductLink.textContent =
+                                "Link copiado";
+
+                            copyProductLink.classList.add(
+                                "is-copied"
+                            );
+
+
+                            setTimeout(
+                                function () {
+
+                                    copyProductLink.textContent =
+                                        textoOriginal;
+
+                                    copyProductLink.classList.remove(
+                                        "is-copied"
+                                    );
+
+                                },
+                                2000
+                            );
+
+                        } catch (erro) {
+
+                            copyProductLink.textContent =
+                                "Não foi possível copiar";
+
+
+                            setTimeout(
+                                function () {
+
+                                    copyProductLink.textContent =
+                                        textoOriginal;
+
+                                },
+                                2000
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+        }
+    );
 </script>
 </body>
 </html>

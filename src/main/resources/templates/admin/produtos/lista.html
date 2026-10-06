@@ -689,6 +689,102 @@
 
                 </table>
 
+            </div>
+
+            <!-- =================================================
+                    PAGINAÇÃO
+                    ================================================= -->
+
+            <div class="bp-admin-pagination"
+                 th:if="${totalProdutos > 0}">
+
+                <div class="bp-admin-pagination-info">
+
+                    <strong th:text="${totalProdutos}">
+                        0
+                    </strong>
+
+                    <span>
+                        produto(s)
+                    </span>
+
+                </div>
+
+
+                <div class="bp-admin-pagination-controls"
+                     th:if="${totalPaginas > 1}">
+
+
+                    <!-- ANTERIOR -->
+
+                    <a class="bp-admin-pagination-button"
+                       th:classappend="${primeiraPagina} ? ' is-disabled' : ''"
+
+                       th:href="${primeiraPagina}
+                            ? '#'
+                            : @{/admin/produtos(
+                                pagina=${paginaAtual - 1},
+                                busca=${busca},
+                                categoriaId=${categoriaSelecionada},
+                                marcaId=${marcaSelecionada},
+                                ativo=${ativoSelecionado},
+                                destaque=${destaqueSelecionado}
+                            )}">
+
+                        ← Anterior
+
+                    </a>
+
+
+                    <!-- PÁGINAS -->
+
+                    <div class="bp-admin-pagination-pages">
+
+                        <a
+                            th:each="numero : ${#numbers.sequence(0, totalPaginas - 1)}"
+                            class="bp-admin-pagination-page"
+
+                            th:classappend="${numero == paginaAtual}
+                                ? ' is-active'
+                                : ''"
+
+                            th:text="${numero + 1}"
+
+                            th:href="@{/admin/produtos(
+                                pagina=${numero},
+                                busca=${busca},
+                                categoriaId=${categoriaSelecionada},
+                                marcaId=${marcaSelecionada},
+                                ativo=${ativoSelecionado},
+                                destaque=${destaqueSelecionado}
+                            )}">
+                            1
+                        </a>
+
+                    </div>
+
+
+                    <!-- PRÓXIMA -->
+
+                    <a class="bp-admin-pagination-button"
+                       th:classappend="${ultimaPagina} ? ' is-disabled' : ''"
+
+                       th:href="${ultimaPagina}
+                            ? '#'
+                            : @{/admin/produtos(
+                                pagina=${paginaAtual + 1},
+                                busca=${busca},
+                                categoriaId=${categoriaSelecionada},
+                                marcaId=${marcaSelecionada},
+                                ativo=${ativoSelecionado},
+                                destaque=${destaqueSelecionado}
+                            )}">
+
+                        Próxima →
+
+                    </a>
+
+                </div>
 
             </div>
 

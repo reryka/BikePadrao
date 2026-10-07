@@ -1,6 +1,7 @@
 package br.com.bikepadrao.controller.admin.relatorios;
 
-import br.com.bikepadrao.service.relatorios.RelatorioExportacaoService;
+import br.com.bikepadrao.service.relatorios.RelatorioCsvService;
+import br.com.bikepadrao.service.relatorios.RelatorioPdfService;
 import br.com.bikepadrao.service.relatorios.RelatorioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminRelatorioController {
 
     private final RelatorioService relatorioService;
-    private final RelatorioExportacaoService relatorioExportacaoService;
-
+    private final RelatorioCsvService relatorioCsvService;
+    private final RelatorioPdfService relatorioPdfService;
 
     @GetMapping("/admin/relatorios")
     public String relatorios(Model model) {
@@ -79,7 +80,7 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/estoque/exportar/csv")
     public ResponseEntity<byte[]> exportarEstoqueCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarEstoqueCsv();
+        byte[] arquivo = relatorioCsvService.exportarEstoqueCsv();
 
         return ResponseEntity
                 .ok()
@@ -91,7 +92,7 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/categorias/exportar/csv")
     public ResponseEntity<byte[]> exportarCategoriasCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarCategoriasCsv();
+        byte[] arquivo = relatorioCsvService.exportarCategoriasCsv();
 
         return ResponseEntity
                 .ok()
@@ -103,7 +104,7 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/marcas/exportar/csv")
     public ResponseEntity<byte[]> exportarMarcasCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarMarcasCsv();
+        byte[] arquivo = relatorioCsvService.exportarMarcasCsv();
 
         return ResponseEntity
                 .ok()
@@ -115,7 +116,7 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/sem-imagem/exportar/csv")
     public ResponseEntity<byte[]> exportarSemImagemCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarSemImagemCsv();
+        byte[] arquivo = relatorioCsvService.exportarSemImagemCsv();
 
         return ResponseEntity
                 .ok()
@@ -127,7 +128,7 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/sem-especificacao/exportar/csv")
     public ResponseEntity<byte[]> exportarSemEspecificacaoCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarSemEspecificacoesCsv();
+        byte[] arquivo = relatorioCsvService.exportarSemEspecificacoesCsv();
 
         return ResponseEntity
                 .ok()
@@ -139,12 +140,105 @@ public class AdminRelatorioController {
     @GetMapping("/admin/relatorios/recentes/exportar/csv")
     public ResponseEntity<byte[]> exportarRecentesCsv() {
 
-        byte[] arquivo = relatorioExportacaoService.exportarRecentesCsv();
+        byte[] arquivo = relatorioCsvService.exportarRecentesCsv();
 
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"relatorio-produtos-recentes.csv\"")
                 .contentType(MediaType.parseMediaType("text/csv;charset=UTF-8"))
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/estoque/exportar/pdf")
+    public ResponseEntity<byte[]> exportarEstoquePdf() {
+
+        byte[] arquivo = relatorioPdfService.exportarEstoquePdf();
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"relatorio-estoque.pdf\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/categorias/exportar/pdf")
+    public ResponseEntity<byte[]> exportarCategoriasPdf() {
+
+        byte[] arquivo = relatorioPdfService.exportarCategoriasPdf();
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"relatorio-categorias.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/marcas/exportar/pdf")
+    public ResponseEntity<byte[]> exportarMarcasPdf() {
+
+        byte[] arquivo = relatorioPdfService.exportarMarcasPdf();
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"relatorio-marcas.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/sem-imagem/exportar/pdf")
+    public ResponseEntity<byte[]> exportarSemImagemPdf() {
+
+        byte[] arquivo =
+                relatorioPdfService
+                        .exportarSemImagemPdf();
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"relatorio-produtos-sem-imagem.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/sem-especificacao/exportar/pdf")
+    public ResponseEntity<byte[]> exportarSemEspecificacoesPdf() {
+
+        byte[] arquivo =
+                relatorioPdfService
+                        .exportarSemEspecificacoesPdf();
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"relatorio-produtos-sem-especificacoes.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(arquivo);
+    }
+
+    @GetMapping("/admin/relatorios/recentes/exportar/pdf")
+    public ResponseEntity<byte[]> exportarRecentesPdf() {
+
+        byte[] arquivo =
+                relatorioPdfService
+                        .exportarRecentesPdf();
+
+        return ResponseEntity
+                .ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"relatorio-produtos-recentes.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
                 .body(arquivo);
     }
 

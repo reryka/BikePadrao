@@ -53,13 +53,19 @@
 
             </div>
 
-            <a th:href="@{/admin/relatorios/estoque/exportar/csv}"
-               class="bp-admin-primary-button">
-                Exportar CSV
-                <span>
-                    ↓
-                </span>
-            </a>
+            <div class="bp-report-export-actions">
+
+                <a th:href="@{/admin/relatorios/estoque/exportar/csv}" class="bp-admin-primary-button">
+                    Exportar CSV
+                    <span>↓</span>
+                </a>
+
+                <a th:href="@{/admin/relatorios/estoque/exportar/pdf}" class="bp-admin-primary-button">
+                    Exportar PDF
+                    <span>↓</span>
+                </a>
+
+            </div>
 
         </div>
 

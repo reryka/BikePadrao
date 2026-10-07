@@ -13,7 +13,7 @@ import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
-public class RelatorioExportacaoService {
+public class RelatorioCsvService {
 
     private final RelatorioService relatorioService;
 

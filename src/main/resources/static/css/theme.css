@@ -6699,3 +6699,30 @@ a {
     font-size: 1rem;
     font-weight: 850;
 }
+
+/* =========================================================
+   AÇÕES DE EXPORTAÇÃO
+   ========================================================= */
+
+.bp-report-export-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+@media (max-width: 650px) {
+
+    .bp-report-export-actions {
+        width: 100%;
+    }
+
+
+    .bp-report-export-actions .bp-admin-primary-button {
+        flex: 1;
+    }
+
+}

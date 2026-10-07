@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Produtos Recentes | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<main class="bp-admin-main">
+
+    <div class="container">
+
+
+        <!-- CABEÇALHO -->
+
+        <div class="bp-admin-list-heading">
+
+            <div>
+
+                <span class="bp-section-eyebrow">
+                    RELATÓRIOS
+                </span>
+
+                <h1>
+                    Produtos recentes
+                </h1>
+
+                <p>
+                    Produtos ordenados pela data de cadastro,
+                    do mais recente para o mais antigo.
+                </p>
+
+            </div>
+
+
+            <a th:href="@{/admin/relatorios/recentes/exportar/csv}"
+               class="bp-admin-primary-button">
+
+                Exportar CSV
+
+                <span>
+                    ↓
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <!-- RESUMO -->
+
+        <div class="bp-incomplete-report-summary">
+
+            <span>
+                Produtos cadastrados
+            </span>
+
+            <strong th:text="${#lists.size(produtos)}">
+                0
+            </strong>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <div class="bp-admin-table-card">
+
+            <div class="bp-admin-table-wrapper">
+
+                <table class="bp-admin-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Data
+                        </th>
+
+                        <th>
+                            Produto
+                        </th>
+
+                        <th>
+                            SKU
+                        </th>
+
+                        <th>
+                            Categoria
+                        </th>
+
+                        <th>
+                            Marca
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Ação
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="produto : ${produtos}">
+
+                        <td>
+
+                            <span th:text="${#temporals.format(
+                                produto.dataCriacao,
+                                'dd/MM/yyyy HH:mm'
+                            )}">
+                                01/01/2026 10:00
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <strong th:text="${produto.nome}">
+                                Produto
+                            </strong>
+
+                        </td>
+
+
+                        <td th:text="${produto.sku}">
+                            SKU
+                        </td>
+
+
+                        <td th:text="${produto.categoria}">
+                            Categoria
+                        </td>
+
+
+                        <td th:text="${produto.marca != null
+                            ? produto.marca
+                            : '—'}">
+                            Marca
+                        </td>
+
+
+                        <td>
+
+                            <span class="bp-stock-status bp-stock-status-ok"
+                                  th:if="${produto.ativo}">
+                                Ativo
+                            </span>
+
+                            <span class="bp-stock-status bp-stock-status-danger"
+                                  th:unless="${produto.ativo}">
+                                Inativo
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <a class="bp-admin-edit-button"
+                               th:href="@{/admin/produtos/{id}/editar(id=${produto.id})}">
+                                Editar
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr th:if="${#lists.isEmpty(produtos)}">
+
+                        <td colspan="7"
+                            class="bp-stock-report-empty">
+
+                            Nenhum produto cadastrado.
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="bp-admin-store-link-area">
+
+            <a th:href="@{/admin/relatorios}"
+               class="bp-admin-store-link">
+
+                ← Voltar aos relatórios
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

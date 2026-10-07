@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Relatório de Estoque | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<main class="bp-admin-main">
+
+    <div class="container">
+
+
+        <!-- CABEÇALHO -->
+
+        <div class="bp-admin-list-heading">
+
+            <div>
+
+                <span class="bp-section-eyebrow">
+                    RELATÓRIOS
+                </span>
+
+                <h1>
+                    Estoque
+                </h1>
+
+                <p>
+                    Acompanhe a quantidade disponível e o valor estimado
+                    dos produtos em estoque.
+                </p>
+
+            </div>
+
+            <a th:href="@{/admin/relatorios/estoque/exportar/csv}"
+               class="bp-admin-primary-button">
+                Exportar CSV
+                <span>
+                    ↓
+                </span>
+            </a>
+
+        </div>
+
+
+        <!-- RESUMO -->
+
+        <div class="bp-stock-report-summary">
+
+            <article class="bp-stock-report-summary-card">
+
+                <span>
+                    Produtos analisados
+                </span>
+
+                <strong th:text="${#lists.size(relatorio.produtos)}">
+                    0
+                </strong>
+
+            </article>
+
+
+            <article class="bp-stock-report-summary-card">
+
+                <span>
+                    Valor estimado do estoque
+                </span>
+
+                <strong>
+                    R$
+                    <span th:text="${#numbers.formatDecimal(
+                        relatorio.valorTotalEstoque,
+                        1,
+                        2
+                    )}">
+                        0,00
+                    </span>
+                </strong>
+
+            </article>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <div class="bp-admin-table-card">
+
+            <div class="bp-admin-table-wrapper">
+
+                <table class="bp-admin-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>Produto</th>
+
+                        <th>SKU</th>
+
+                        <th>Categoria</th>
+
+                        <th>Marca</th>
+
+                        <th>Estoque</th>
+
+                        <th>Preço</th>
+
+                        <th>Valor em estoque</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="produto : ${relatorio.produtos}">
+
+                        <td>
+
+                            <strong th:text="${produto.nome}">
+                                Produto
+                            </strong>
+
+                        </td>
+
+
+                        <td th:text="${produto.sku}">
+                            SKU
+                        </td>
+
+
+                        <td th:text="${produto.categoria}">
+                            Categoria
+                        </td>
+
+
+                        <td th:text="${produto.marca != null
+                            ? produto.marca
+                            : '—'}">
+                            Marca
+                        </td>
+
+
+                        <td th:text="${produto.estoque}">
+                            0
+                        </td>
+
+
+                        <td>
+
+                            R$
+
+                            <span th:text="${#numbers.formatDecimal(
+                                produto.preco,
+                                1,
+                                2
+                            )}">
+                                0,00
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            R$
+
+                            <span th:text="${#numbers.formatDecimal(
+                                produto.valorEstoque,
+                                1,
+                                2
+                            )}">
+                                0,00
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="bp-stock-status bp-stock-status-danger"
+                                  th:if="${produto.statusEstoque == 'SEM_ESTOQUE'}">
+                                Sem estoque
+                            </span>
+
+
+                            <span class="bp-stock-status bp-stock-status-warning"
+                                  th:if="${produto.statusEstoque == 'ESTOQUE_BAIXO'}">
+                                Estoque baixo
+                            </span>
+
+
+                            <span class="bp-stock-status bp-stock-status-ok"
+                                  th:if="${produto.statusEstoque == 'NORMAL'}">
+                                Normal
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr th:if="${#lists.isEmpty(relatorio.produtos)}">
+
+                        <td colspan="8"
+                            class="bp-stock-report-empty">
+
+                            Nenhum produto cadastrado.
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="bp-admin-store-link-area">
+
+            <a th:href="@{/admin/relatorios}"
+               class="bp-admin-store-link">
+
+                ← Voltar aos relatórios
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

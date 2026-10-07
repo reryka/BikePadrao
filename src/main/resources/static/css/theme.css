@@ -6258,3 +6258,444 @@ a {
 
     font-weight: 750;
 }
+
+/* =========================================================
+   ADMIN - RELATÓRIOS
+   ========================================================= */
+
+.bp-report-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+.bp-report-card {
+    position: relative;
+
+    min-height: 155px;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bp-border);
+    border-radius: 14px;
+
+    box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.035);
+
+    overflow: hidden;
+}
+
+
+.bp-report-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: var(--bp-gradient);
+}
+
+
+.bp-report-card-label {
+    color: var(--bp-text-muted);
+
+    font-size: 0.72rem;
+    font-weight: 750;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+
+.bp-report-card-value {
+    margin-top: 14px;
+
+    color: var(--bp-black);
+
+    font-size: 2.2rem;
+    font-weight: 850;
+
+    line-height: 1;
+}
+
+
+.bp-report-card-help {
+    margin-top: auto;
+    padding-top: 18px;
+
+    color: var(--bp-text-muted);
+
+    font-size: 0.74rem;
+}
+
+
+.bp-report-card-warning::before {
+    background: #d99000;
+}
+
+
+.bp-report-card-danger::before {
+    background: #c63e3e;
+}
+
+
+.bp-report-card-warning .bp-report-card-value {
+    color: #b57600;
+}
+
+
+.bp-report-card-danger .bp-report-card-value {
+    color: #b63535;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .bp-report-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .bp-report-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =========================================================
+   RELATÓRIO DE ESTOQUE
+   ========================================================= */
+
+.bp-stock-report-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+
+.bp-stock-report-summary-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bp-border);
+    border-radius: 14px;
+
+    box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.035);
+}
+
+
+.bp-stock-report-summary-card span {
+    color: var(--bp-text-muted);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.bp-stock-report-summary-card strong {
+    color: var(--bp-black);
+
+    font-size: 1.75rem;
+    font-weight: 850;
+}
+
+
+.bp-stock-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+
+    padding: 0 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.7rem;
+    font-weight: 750;
+
+    white-space: nowrap;
+}
+
+
+.bp-stock-status-ok {
+    background: #edf8f1;
+
+    color: #2c7747;
+}
+
+
+.bp-stock-status-warning {
+    background: #fff5dc;
+
+    color: #9a6800;
+}
+
+
+.bp-stock-status-danger {
+    background: #fdecec;
+
+    color: #a93636;
+}
+
+
+.bp-stock-report-empty {
+    padding: 35px !important;
+
+    text-align: center;
+
+    color: var(--bp-text-muted);
+}
+
+
+@media (max-width: 700px) {
+
+    .bp-stock-report-summary {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+/* =========================================================
+   RELATÓRIO POR CATEGORIA
+   ========================================================= */
+
+.bp-category-report-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 24px;
+}
+
+
+.bp-category-report-summary-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bp-border);
+    border-radius: 14px;
+
+    box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.035);
+}
+
+
+.bp-category-report-summary-card span {
+    color: var(--bp-text-muted);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.bp-category-report-summary-card strong {
+    color: var(--bp-black);
+
+    font-size: 1.75rem;
+    font-weight: 850;
+}
+
+
+/* GRÁFICO */
+
+.bp-category-report-chart {
+    margin-bottom: 24px;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bp-border);
+    border-radius: 14px;
+
+    box-shadow:
+            0 5px 20px rgba(0, 0, 0, 0.035);
+}
+
+
+.bp-category-report-chart-heading {
+    margin-bottom: 25px;
+}
+
+
+.bp-category-report-chart-heading h2 {
+    margin: 4px 0 0;
+
+    color: var(--bp-black);
+
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+
+.bp-category-report-bars {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.bp-category-report-row {
+    display: grid;
+
+    grid-template-columns: 190px 1fr;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+
+.bp-category-report-label {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.bp-category-report-label strong {
+    color: var(--bp-black);
+
+    font-size: 0.82rem;
+}
+
+
+.bp-category-report-label span {
+    color: var(--bp-text-muted);
+
+    font-size: 0.7rem;
+}
+
+
+.bp-category-report-track {
+    height: 12px;
+
+    overflow: hidden;
+
+    background: #edf0ee;
+
+    border-radius: 999px;
+}
+
+
+.bp-category-report-bar {
+    min-width: 0;
+
+    height: 100%;
+
+    background: var(--bp-gradient);
+
+    border-radius: 999px;
+}
+
+
+@media (max-width: 700px) {
+
+    .bp-category-report-summary {
+        grid-template-columns: 1fr;
+    }
+
+
+    .bp-category-report-row {
+        grid-template-columns: 1fr;
+
+        gap: 8px;
+    }
+
+}
+
+/* =========================================================
+   RELATÓRIO - PRODUTOS INCOMPLETOS
+   ========================================================= */
+
+.bp-incomplete-report-summary {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 24px;
+
+    padding: 14px 18px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--bp-border);
+    border-radius: 10px;
+
+    box-shadow:
+            0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+
+.bp-incomplete-report-summary span {
+    color: var(--bp-text-muted);
+
+    font-size: 0.78rem;
+    font-weight: 650;
+}
+
+
+.bp-incomplete-report-summary strong {
+    color: var(--bp-black);
+
+    font-size: 1rem;
+    font-weight: 850;
+}

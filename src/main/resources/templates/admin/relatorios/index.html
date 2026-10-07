@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Relatórios | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<!-- =====================================================
+     CONTEÚDO
+     ===================================================== -->
+
+<main class="bp-admin-main">
+
+    <div class="container">
+
+
+        <!-- =================================================
+             CABEÇALHO
+             ================================================= -->
+
+        <div class="bp-admin-list-heading">
+
+            <div>
+
+                <span class="bp-section-eyebrow">
+                    RELATÓRIOS
+                </span>
+
+                <h1>
+                    Visão geral
+                </h1>
+
+                <p>
+                    Acompanhe os principais indicadores do catálogo e estoque.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             INDICADORES
+             ================================================= -->
+
+        <div class="bp-report-grid">
+
+
+            <!-- TOTAL -->
+
+            <article class="bp-report-card">
+
+                <span class="bp-report-card-label">
+                    Total de produtos
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.totalProdutos}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Produtos cadastrados
+                </span>
+
+            </article>
+
+
+            <!-- ATIVOS -->
+
+            <article class="bp-report-card">
+
+                <span class="bp-report-card-label">
+                    Produtos ativos
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.produtosAtivos}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Visíveis no catálogo
+                </span>
+
+            </article>
+
+
+            <!-- INATIVOS -->
+
+            <article class="bp-report-card">
+
+                <span class="bp-report-card-label">
+                    Produtos inativos
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.produtosInativos}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Ocultos do catálogo
+                </span>
+
+            </article>
+
+
+            <!-- ESTOQUE BAIXO -->
+
+            <article class="bp-report-card bp-report-card-warning">
+
+                <span class="bp-report-card-label">
+                    Estoque baixo
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.estoqueBaixo}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Entre 1 e 5 unidades
+                </span>
+
+            </article>
+
+
+            <!-- SEM ESTOQUE -->
+
+            <article class="bp-report-card bp-report-card-danger">
+
+                <span class="bp-report-card-label">
+                    Sem estoque
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.semEstoque}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Produtos zerados
+                </span>
+
+            </article>
+
+
+            <!-- CATEGORIAS -->
+
+            <article class="bp-report-card">
+
+                <span class="bp-report-card-label">
+                    Categorias
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.totalCategorias}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Categorias cadastradas
+                </span>
+
+            </article>
+
+
+            <!-- MARCAS -->
+
+            <article class="bp-report-card">
+
+                <span class="bp-report-card-label">
+                    Marcas
+                </span>
+
+                <strong class="bp-report-card-value"
+                        th:text="${resumo.totalMarcas}">
+                    0
+                </strong>
+
+                <span class="bp-report-card-help">
+                    Marcas cadastradas
+                </span>
+
+            </article>
+
+
+        </div>
+
+        <!-- =================================================
+             RELATÓRIOS DISPONÍVEIS
+             ================================================= -->
+
+        <div class="bp-admin-list-heading"
+             style="margin-top: 40px;">
+
+            <div>
+
+        <span class="bp-section-eyebrow">
+            RELATÓRIOS DISPONÍVEIS
+        </span>
+
+                <h1 style="font-size: 1.7rem;">
+                    Consultas detalhadas
+                </h1>
+
+                <p>
+                    Acesse os relatórios completos do sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="bp-admin-grid">
+
+
+            <!-- ESTOQUE -->
+
+            <a th:href="@{/admin/relatorios/estoque}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    01
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Estoque
+                    </strong>
+
+                    <span>
+                Consulte quantidades, status
+                e valor estimado dos produtos.
+            </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+            →
+        </span>
+
+            </a>
+
+
+            <!-- PRODUTOS POR CATEGORIA -->
+
+            <a th:href="@{/admin/relatorios/categorias}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    02
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos por categoria
+                    </strong>
+
+                    <span>
+                Visualize a distribuição dos
+                produtos entre as categorias.
+            </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+            →
+        </span>
+
+            </a>
+
+
+            <!-- PRODUTOS POR MARCA -->
+
+            <a th:href="@{/admin/relatorios/marcas}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    03
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos por marca
+                    </strong>
+
+                    <span>
+                        Visualize a distribuição dos
+                        produtos entre as marcas.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+            <!-- PRODUTOS SEM IMAGEM -->
+
+            <a th:href="@{/admin/relatorios/sem-imagem}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    04
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos sem imagem
+                    </strong>
+
+                    <span>
+                        Localize produtos que ainda
+                        não possuem imagens cadastradas.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- PRODUTOS SEM ESPECIFICAÇÕES -->
+
+            <a th:href="@{/admin/relatorios/sem-especificacao}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    05
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos sem especificações
+                    </strong>
+
+                    <span>
+                        Localize produtos que ainda
+                        não possuem especificações técnicas.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+            <!-- PRODUTOS RECENTES -->
+
+            <a th:href="@{/admin/relatorios/recentes}"
+               class="bp-admin-card">
+
+                <div class="bp-admin-card-number">
+                    06
+                </div>
+
+                <div class="bp-admin-card-content">
+
+                    <strong>
+                        Produtos recentes
+                    </strong>
+
+                    <span>
+                        Consulte os produtos cadastrados
+                        do mais recente para o mais antigo.
+                    </span>
+
+                </div>
+
+                <span class="bp-admin-card-arrow">
+                    →
+                </span>
+
+            </a>
+
+        </div>
+
+        <!-- =================================================
+             VOLTAR
+             ================================================= -->
+
+        <div class="bp-admin-store-link-area">
+
+            <a th:href="@{/admin}"
+               class="bp-admin-store-link">
+
+                ← Voltar ao painel
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Produtos por Categoria | Bike Padrão
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/theme.css}">
+
+</head>
+
+<body class="bp-admin-page">
+
+
+<div th:replace="~{admin/fragments/header :: adminHeader}"></div>
+
+
+<main class="bp-admin-main">
+
+    <div class="container">
+
+
+        <!-- CABEÇALHO -->
+
+        <div class="bp-admin-list-heading">
+
+            <div>
+
+                <span class="bp-section-eyebrow">
+                    RELATÓRIOS
+                </span>
+
+                <h1>
+                    Produtos por categoria
+                </h1>
+
+                <p>
+                    Distribuição dos produtos cadastrados entre
+                    as categorias do catálogo.
+                </p>
+
+            </div>
+
+            <a th:href="@{/admin/relatorios/categorias/exportar/csv}"
+               class="bp-admin-primary-button">
+                Exportar CSV
+                <span>
+                    ↓
+                </span>
+            </a>
+
+        </div>
+
+
+        <!-- RESUMO -->
+
+        <div class="bp-category-report-summary">
+
+            <article class="bp-category-report-summary-card">
+
+                <span>
+                    Categorias
+                </span>
+
+                <strong th:text="${#lists.size(categorias)}">
+                    0
+                </strong>
+
+            </article>
+
+
+            <article class="bp-category-report-summary-card">
+
+                <span>
+                    Produtos cadastrados
+                </span>
+
+                <strong th:text="${resumo.totalProdutos}">
+                    0
+                </strong>
+
+            </article>
+
+        </div>
+
+
+        <!-- GRÁFICO -->
+
+        <div class="bp-category-report-chart">
+
+            <div class="bp-category-report-chart-heading">
+
+                <span class="bp-section-eyebrow">
+                    DISTRIBUIÇÃO
+                </span>
+
+                <h2>
+                    Produtos por categoria
+                </h2>
+
+            </div>
+
+
+            <div class="bp-category-report-bars">
+
+                <div class="bp-category-report-row"
+                     th:each="categoria : ${categorias}">
+
+                    <div class="bp-category-report-label">
+
+                        <strong th:text="${categoria.categoria}">
+                            Categoria
+                        </strong>
+
+                        <span th:text="${categoria.quantidadeProdutos + ' produto(s)'}">
+                            0 produtos
+                        </span>
+
+                    </div>
+
+
+                    <div class="bp-category-report-track">
+
+                        <div class="bp-category-report-bar"
+                             th:style="${resumo.totalProdutos > 0}
+                                ? 'width: ' +
+                                  ${(categoria.quantidadeProdutos * 100.0) / resumo.totalProdutos}
+                                  + '%'
+                                : 'width: 0%'">
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <div class="bp-admin-table-card">
+
+            <div class="bp-admin-table-wrapper">
+
+                <table class="bp-admin-table">
+
+                    <thead>
+
+                    <tr>
+
+                        <th>
+                            Categoria
+                        </th>
+
+                        <th>
+                            Quantidade de produtos
+                        </th>
+
+                        <th>
+                            Participação
+                        </th>
+
+                    </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    <tr th:each="categoria : ${categorias}">
+
+                        <td>
+
+                            <strong th:text="${categoria.categoria}">
+                                Categoria
+                            </strong>
+
+                        </td>
+
+
+                        <td th:text="${categoria.quantidadeProdutos}">
+                            0
+                        </td>
+
+
+                        <td>
+
+                            <span th:if="${resumo.totalProdutos > 0}"
+                                  th:text="${#numbers.formatDecimal(
+                                      (categoria.quantidadeProdutos * 100.0)
+                                      / resumo.totalProdutos,
+                                      1,
+                                      1
+                                  ) + '%'}">
+                                0%
+                            </span>
+
+                            <span th:if="${resumo.totalProdutos == 0}">
+                                0%
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr th:if="${#lists.isEmpty(categorias)}">
+
+                        <td colspan="3"
+                            class="bp-stock-report-empty">
+
+                            Nenhuma categoria cadastrada.
+
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <div class="bp-admin-store-link-area">
+
+            <a th:href="@{/admin/relatorios}"
+               class="bp-admin-store-link">
+
+                ← Voltar aos relatórios
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+</body>
+</html>
